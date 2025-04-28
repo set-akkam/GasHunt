@@ -1,0 +1,264 @@
+{
+  "brand": {
+    "name": "GasHunt",
+    "slogan": "Real Prices, Real Savings."
+  },
+  "nav": {
+    "leaderboard": "Leaderboard",
+    "nearbyStations": "Nearby Stations",
+    "dashboard": "Dashboard",
+    "liveMap": "Live Map",
+    "login": "Login",
+    "settings": "Settings",
+    "logout": "Log Out"
+  },
+  "footer": {
+    "selectLanguage": "Select Language",
+    "support": "Support",
+    "helpCenter": "Help Center",
+    "map": "Map",
+    "liveMap": "Live - Map",
+    "mapInfo": "Map Info",
+    "about": "About",
+    "aboutUs": "About Us",
+    "copyright": "© 2025 GasHunt. All Rights Reserved.",
+    "termsOfUse": "Terms of Use",
+    "privacyPolicy": "Privacy Policy",
+    "copyrightNotice": "Copyright Notice"
+  },
+  "landing": {
+    "title": "Track Fuel Prices in Your Area",
+    "subtitle": "Be a Driver Who Helps Others Save on Fuel",
+    "signUp": "Sign Up",
+    "learnMore": "Learn more",
+    "communityDriven": "🚗 Community-Driven App",
+    "communityText": "Join a network of drivers working together to keep fuel prices transparent and accessible for everyone.",
+    "realTimePrices": "⛽ Real-Time Fuel Prices",
+    "realTimePricesText": "Check the latest fuel prices near you and choose the best station to maximize your savings.",
+    "liveMapHeading": "🗺️ Live Interactive Map",
+    "liveMapHeadingText": "Easily find and compare fuel prices in your area using our real-time map.",
+    "cityTracker": "📍 Find the Nearest Fuel Stations",
+    "cityTrackerText": "Quickly locate the closest fuel stations, updated by the community, and save on every refill."
+  },
+  "terms": {
+    "title": "Terms of Use 📜",
+    "lastUpdated": "Last updated: March 27, 2024",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing and using GasHunt, you agree to be bound by these Terms of Use and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site."
+      },
+      "userAccounts": {
+        "title": "2. User Accounts",
+        "content": "You must create an account to submit fuel prices. You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account."
+      },
+      "userContributions": {
+        "title": "3. User Contributions",
+        "content": "When submitting fuel prices, you agree to provide accurate and current information. Intentionally submitting false information may result in account suspension or termination."
+      },
+      "privacy": {
+        "title": "4. Privacy",
+        "content": "Your use of GasHunt is also governed by our Privacy Policy. Please review our Privacy Policy to understand our practices."
+      },
+      "modifications": {
+        "title": "5. Modifications",
+        "content": "We reserve the right to modify or replace these Terms at any time. We will provide notice of any significant changes through our website or by sending you an email."
+      }
+    },
+    "questions": {
+      "title": "Questions About Our Terms?",
+      "content": "If you have any questions about these Terms of Use, please contact us.",
+      "button": "Contact Support"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy 🔒",
+    "lastUpdated": "Last updated: March 27, 2024",
+    "sections": {
+      "informationCollection": {
+        "title": "Information We Collect",
+        "content": "We collect information that you provide directly to us, including your name, email address, and location data when you submit fuel prices. We also collect usage data and device information to improve our service."
+      },
+      "informationUse": {
+        "title": "How We Use Your Information",
+        "content": "We use the information we collect to provide and improve our services, communicate with you, and ensure the security of our platform. Your location data is used to show relevant fuel prices in your area."
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "content": "We implement appropriate security measures to protect your personal information. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security."
+      },
+      "yourRights": {
+        "title": "Your Rights",
+        "content": "You have the right to access, correct, or delete your personal information. You can also opt out of certain data collection and use. Contact us to exercise these rights."
+      }
+    },
+    "questions": {
+      "title": "Privacy Questions?",
+      "content": "If you have any questions about our privacy practices, please contact our privacy team.",
+      "button": "Contact Privacy Team"
+    }
+  },
+  "mapInfo": {
+    "title": "Understanding Our Map",
+    "subtitle": "Learn how to make the most of our interactive fuel price map",
+    "features": {
+      "realTimeUpdates": {
+        "title": "Real-Time Updates",
+        "description": "See fuel prices as they're updated by our community members, ensuring you always have the latest information."
+      },
+      "priceHistory": {
+        "title": "Price History",
+        "description": "Track price trends over time with our historical data visualization tools."
+      },
+      "stationDetails": {
+        "title": "Station Details",
+        "description": "View comprehensive information about each station, including amenities, operating hours, and user reviews."
+      },
+      "priceAlerts": {
+        "title": "Price Alerts",
+        "description": "Set up notifications for when prices drop below your desired threshold in your area."
+      }
+    },
+    "howToUse": {
+      "title": "How to Use the Map",
+      "steps": {
+        "step1": {
+          "title": "Enable Location",
+          "description": "Allow location access to find stations near you"
+        },
+        "step2": {
+          "title": "Browse Prices",
+          "description": "Click on stations to view current prices and details"
+        },
+        "step3": {
+          "title": "Contribute",
+          "description": "Help others by updating prices you see"
+        }
+      }
+    }
+  },
+  "learnMore": {
+    "title": "About GasHunt",
+    "subtitle": "Discover how we're revolutionizing the way drivers find the best fuel prices in their area.",
+    "mission": {
+      "title": "🎯 Our Mission",
+      "content": "GasHunt was created with a simple goal: to help drivers save money on fuel through community-driven price updates. We believe that by working together, we can make fuel prices more transparent and help everyone make informed decisions about where to fill up."
+    },
+    "howItWorks": {
+      "title": "⚙️ How It Works",
+      "content": "Users like you submit real-time fuel prices as they spot them. Our platform aggregates this data and displays it on an interactive map, making it easy to find the best prices in your area. The more people contribute, the more accurate and useful the information becomes."
+    },
+    "features": {
+      "title": "✨ Key Features",
+      "realTimeUpdates": {
+        "title": "Real-time Updates",
+        "content": "Get the latest fuel prices as they change, updated by our community of users."
+      },
+      "interactiveMap": {
+        "title": "Interactive Map",
+        "content": "Easily visualize and compare fuel prices in your area with our intuitive map interface."
+      },
+      "personalDashboard": {
+        "title": "Personal Dashboard",
+        "content": "Dashboard that helps you track fuel stations and prices in your area"
+      }
+    },
+    "cta": {
+      "title": "Ready to start helping? 🤝",
+      "button": "Join GasHunt Today"
+    }
+  },
+  "helpCenter": {
+    "title": "How Can We Help You? 🤔",
+    "subtitle": "Find answers to common questions and learn how to make the most of GasHunt",
+    "faqs": {
+      "submitPrice": {
+        "question": "How do I submit a fuel price?",
+        "answer": "To submit a fuel price, navigate to the map, find your station, and click the 'Submit Price' button. You'll need to be logged in to submit prices."
+      },
+      "updateFrequency": {
+        "question": "How often are prices updated?",
+        "answer": "Prices are updated in real-time as our community members submit them. Each price shows when it was last updated."
+      },
+      "incorrectPrice": {
+        "question": "What if I find an incorrect price?",
+        "answer": "You can thumbs down the price if it's incorrect and thumbs up the price if it's correct. This helps us keep the prices accurate."
+      },
+      "earnPoints": {
+        "question": "How do I earn points?",
+        "answer": "You earn points by submitting accurate fuel prices, verifying existing prices, and contributing to the community. More submissions = more points!"
+      }
+    },
+    "support": {
+      "title": "Still Need Help?",
+      "content": "Our support team is here to help you with any questions or concerns.",
+      "button": "Contact Support"
+    }
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Making fuel prices transparent for everyone",
+    "stats": {
+      "fuelPriceRise": {
+        "number": "33.8%",
+        "label": "Rise in fuel prices last 5 years"
+      },
+      "activeDrivers": {
+        "number": "2.8m",
+        "label": "Drivers are on the road each day"
+      },
+      "fuelStations": {
+        "number": "1,500+",
+        "label": "Fuel stations operating in Ireland"
+      },
+      "fuelVolume": {
+        "number": "9.1m",
+        "label": "Liters of fuel sold per day"
+      }
+    },
+    "sections": {
+      "whoWeAre": {
+        "title": "Who We Are",
+        "content": "GasHunt is a community-driven platform dedicated to helping drivers find the best fuel prices in their area."
+      },
+      "ourValues": {
+        "title": "Our Values",
+        "transparency": {
+          "title": "Transparency",
+          "content": "We believe in complete transparency in fuel pricing"
+        },
+        "community": {
+          "title": "Community",
+          "content": "Our strength lies in our community of contributors"
+        },
+        "innovation": {
+          "title": "Innovation",
+          "content": "We continuously innovate to provide better services"
+        }
+      }
+    }
+  },
+  "copyright": {
+    "title": "Copyright Information",
+    "subtitle": "Legal information about GasHunt's content and services",
+    "sections": {
+      "ownership": {
+        "title": "Content Ownership",
+        "content": "All content on GasHunt is protected by copyright law"
+      },
+      "userContent": {
+        "title": "User-Generated Content",
+        "content": "Users retain rights to their contributed data while granting GasHunt license to use it"
+      },
+      "thirdParty": {
+        "title": "Third-Party Content",
+        "content": "Some content may be owned by third parties and is used with permission"
+      }
+    },
+    "contact": {
+      "title": "Copyright Inquiries",
+      "content": "For copyright-related questions, please contact our legal team",
+      "button": "Contact Legal Team"
+    }
+  }
+} 

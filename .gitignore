@@ -1,0 +1,22 @@
+# Google Cloud credentials
+/config/keys/*.json 
+
+
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Optional: build outputs
+dist/
+build/

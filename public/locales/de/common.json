@@ -1,0 +1,221 @@
+{
+  "brand": {
+    "name": "GasHunt",
+    "slogan": "Echte Preise, Echte Einsparungen."
+  },
+  "nav": {
+    "leaderboard": "Bestenliste",
+    "nearbyStations": "Tankstellen in der Nähe",
+    "dashboard": "Dashboard",
+    "liveMap": "Live-Karte",
+    "login": "Anmelden",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
+  },
+  "footer": {
+    "selectLanguage": "Sprache Auswählen",
+    "support": "Support",
+    "helpCenter": "Hilfezentrum",
+    "map": "Karte",
+    "liveMap": "Live-Karte",
+    "mapInfo": "Karteninfo",
+    "about": "Über Uns",
+    "aboutUs": "Über Uns",
+    "copyright": "© 2025 GasHunt. Alle Rechte Vorbehalten.",
+    "termsOfUse": "Nutzungsbedingungen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "copyrightNotice": "Urheberrechtshinweis"
+  },
+  "landing": {
+    "title": "Verfolgen Sie Kraftstoffpreise in Ihrer Umgebung",
+    "subtitle": "Seien Sie ein Fahrer, der anderen Fahrern hilft, Geld zu sparen",
+    "signUp": "Registrieren",
+    "learnMore": "Mehr Erfahren",
+    "communityDriven": "🚗 Von der Community Betrieben",
+    "communityText": "Werden Sie Teil eines Netzwerks von Mitwirkenden, die Kraftstoffpreise transparent und zugänglich für alle machen.",
+    "realTimePrices": "⛽ Echtzeit-Preise",
+    "realTimePricesText": "Überprüfen Sie einfach die Kraftstoffpreise in Ihrer Umgebung und wählen Sie die beste Tankstelle für Einsparungen bei jedem Tanken.",
+    "liveMapHeading": "🗺️ Live-Interaktive Karte",
+    "liveMapHeadingText": "Finden und vergleichen Sie einfach Kraftstoffpreise in Ihrer Umgebung mit unserer Echtzeit-Karte.",
+    "cityTracker": "📍 Finden Sie die nächsten Tankstellen",
+    "cityTrackerText": "Lokalisieren Sie schnell die nächstgelegenen Tankstellen, aktualisiert von der Community, und sparen Sie bei jedem Tanken."
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen 📜",
+    "lastUpdated": "Zuletzt aktualisiert: 27. März 2024",
+    "sections": {
+      "acceptance": {
+        "title": "1. Annahme der Bedingungen",
+        "content": "Durch den Zugriff auf und die Nutzung von GasHunt erklären Sie sich mit diesen Nutzungsbedingungen und allen geltenden Gesetzen und Vorschriften einverstanden. Wenn Sie mit einer dieser Bedingungen nicht einverstanden sind, ist Ihnen die Nutzung oder der Zugriff auf diese Website untersagt."
+      },
+      "userAccounts": {
+        "title": "2. Benutzerkonten",
+        "content": "Sie müssen ein Konto erstellen, um Kraftstoffpreise einzureichen. Sie sind für die Vertraulichkeit Ihres Kontos und Passworts verantwortlich. Sie erklären sich damit einverstanden, die Verantwortung für alle Aktivitäten zu übernehmen, die unter Ihrem Konto stattfinden."
+      },
+      "userContributions": {
+        "title": "3. Benutzerbeiträge",
+        "content": "Bei der Einreichung von Kraftstoffpreisen verpflichten Sie sich, genaue und aktuelle Informationen bereitzustellen. Die vorsätzliche Einreichung falscher Informationen kann zur Sperrung oder Kündigung Ihres Kontos führen."
+      },
+      "privacy": {
+        "title": "4. Datenschutz",
+        "content": "Ihre Nutzung von GasHunt unterliegt auch unserer Datenschutzerklärung. Bitte lesen Sie unsere Datenschutzerklärung, um unsere Praktiken zu verstehen."
+      },
+      "modifications": {
+        "title": "5. Änderungen",
+        "content": "Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern oder zu ersetzen. Wir werden Sie über wesentliche Änderungen über unsere Website oder per E-Mail informieren."
+      }
+    },
+    "questions": {
+      "title": "Fragen zu unseren Bedingungen?",
+      "content": "Wenn Sie Fragen zu diesen Nutzungsbedingungen haben, kontaktieren Sie uns bitte.",
+      "button": "Support Kontaktieren"
+    }
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung 🔒",
+    "lastUpdated": "Zuletzt aktualisiert: 27. März 2024",
+    "sections": {
+      "informationCollection": {
+        "title": "Informationen, die wir sammeln",
+        "content": "Wir sammeln Informationen, die Sie uns direkt zur Verfügung stellen, einschließlich Ihres Namens, Ihrer E-Mail-Adresse und Standortdaten, wenn Sie Kraftstoffpreise einreichen. Wir sammeln auch Nutzungsdaten und Geräteinformationen, um unseren Service zu verbessern."
+      },
+      "informationUse": {
+        "title": "Wie wir Ihre Informationen verwenden",
+        "content": "Wir verwenden die von uns gesammelten Informationen, um unsere Dienste bereitzustellen und zu verbessern, mit Ihnen zu kommunizieren und die Sicherheit unserer Plattform zu gewährleisten. Ihre Standortdaten werden verwendet, um relevante Kraftstoffpreise in Ihrer Umgebung anzuzeigen."
+      },
+      "dataSecurity": {
+        "title": "Datensicherheit",
+        "content": "Wir implementieren angemessene Sicherheitsmaßnahmen, um Ihre persönlichen Informationen zu schützen. Keine Methode der Übertragung über das Internet ist jedoch zu 100% sicher, und wir können keine absolute Sicherheit garantieren."
+      },
+      "yourRights": {
+        "title": "Ihre Rechte",
+        "content": "Sie haben das Recht, auf Ihre persönlichen Informationen zuzugreifen, sie zu korrigieren oder zu löschen. Sie können sich auch von bestimmten Datenerhebungen und -verwendungen abmelden. Kontaktieren Sie uns, um diese Rechte auszuüben."
+      }
+    },
+    "questions": {
+      "title": "Datenschutzfragen?",
+      "content": "Wenn Sie Fragen zu unseren Datenschutzpraktiken haben, kontaktieren Sie bitte unser Datenschutzteam.",
+      "button": "Datenschutzteam Kontaktieren"
+    }
+  },
+  "mapInfo": {
+    "title": "Unsere Karte Verstehen",
+    "subtitle": "Erfahren Sie, wie Sie das Beste aus unserer interaktiven Kraftstoffpreiskarte machen können",
+    "features": {
+      "realTimeUpdates": {
+        "title": "Echtzeit-Aktualisierungen",
+        "description": "Sehen Sie Kraftstoffpreise, während sie von den Mitgliedern unserer Community aktualisiert werden, und stellen Sie sicher, dass Sie immer die neuesten Informationen haben."
+      },
+      "priceHistory": {
+        "title": "Preisverlauf",
+        "description": "Verfolgen Sie Preistrends im Laufe der Zeit mit unseren Tools zur Visualisierung historischer Daten."
+      },
+      "stationDetails": {
+        "title": "Tankstellendetails",
+        "description": "Sehen Sie umfassende Informationen über jede Tankstelle, einschließlich Einrichtungen, Öffnungszeiten und Benutzerbewertungen."
+      },
+      "priceAlerts": {
+        "title": "Preisbenachrichtigungen",
+        "description": "Richten Sie Benachrichtigungen ein, wenn die Preise in Ihrer Umgebung unter Ihren gewünschten Schwellenwert fallen."
+      }
+    },
+    "howToUse": {
+      "title": "Wie man die Karte verwendet",
+      "steps": {
+        "step1": {
+          "title": "Standort aktivieren",
+          "description": "Erlauben Sie den Zugriff auf den Standort, um Tankstellen in Ihrer Nähe zu finden"
+        },
+        "step2": {
+          "title": "Preise durchsuchen",
+          "description": "Klicken Sie auf Tankstellen, um aktuelle Preise und Details anzuzeigen"
+        },
+        "step3": {
+          "title": "Beitragen",
+          "description": "Helfen Sie anderen, indem Sie die Preise aktualisieren, die Sie sehen"
+        }
+      }
+    }
+  },
+  "learnMore": {
+    "title": "Über GasHunt",
+    "subtitle": "Entdecken Sie, wie wir die Art und Weise revolutionieren, wie Fahrer die besten Kraftstoffpreise in ihrer Umgebung finden.",
+    "mission": {
+      "title": "🎯 Unsere Mission",
+      "content": "GasHunt wurde mit einem einfachen Ziel geschaffen: Fahrern durch gemeinschaftliche Preisaktualisierungen beim Sparen von Kraftstoffkosten zu helfen. Wir glauben, dass wir durch Zusammenarbeit Kraftstoffpreise transparenter machen und jedem helfen können, informierte Entscheidungen beim Tanken zu treffen."
+    },
+    "howItWorks": {
+      "title": "⚙️ Wie es funktioniert",
+      "content": "Benutzer wie Sie übermitteln Kraftstoffpreise in Echtzeit, wenn sie sie sehen. Unsere Plattform aggregiert diese Daten und zeigt sie auf einer interaktiven Karte an, wodurch es einfach wird, die besten Preise in Ihrer Umgebung zu finden. Je mehr Menschen beitragen, desto genauer und nützlicher werden die Informationen."
+    },
+    "features": {
+      "title": "✨ Hauptfunktionen",
+      "realTimeUpdates": {
+        "title": "Echtzeit-Updates",
+        "content": "Erhalten Sie die neuesten Kraftstoffpreise, sobald sie sich ändern, aktualisiert von unserer Benutzer-Community."
+      },
+      "interactiveMap": {
+        "title": "Interaktive Karte",
+        "content": "Visualisieren und vergleichen Sie einfach Kraftstoffpreise in Ihrer Umgebung mit unserer intuitiven Kartenoberfläche."
+      },
+      "personalDashboard": {
+        "title": "Persönliches Dashboard",
+        "content": "Ein Dashboard, das Ihnen hilft, Tankstellen und Preise in Ihrer Umgebung zu verfolgen"
+      }
+    },
+    "cta": {
+      "title": "Bereit zu helfen? 🤝",
+      "button": "Jetzt bei GasHunt mitmachen"
+    }
+  },
+  "helpCenter": {
+    "title": "Wie können wir Ihnen helfen? 🤔",
+    "subtitle": "Finden Sie Antworten auf häufige Fragen und lernen Sie, wie Sie GasHunt optimal nutzen können",
+    "faqs": {
+      "submitPrice": {
+        "question": "Wie kann ich einen Kraftstoffpreis einreichen?",
+        "answer": "Um einen Kraftstoffpreis einzureichen, navigieren Sie zur Karte, finden Sie Ihre Tankstelle und klicken Sie auf den Button 'Preis einreichen'. Sie müssen angemeldet sein, um Preise einreichen zu können."
+      },
+      "updateFrequency": {
+        "question": "Wie oft werden die Preise aktualisiert?",
+        "answer": "Die Preise werden in Echtzeit von unseren Community-Mitgliedern aktualisiert. Bei jedem Preis wird angezeigt, wann er zuletzt aktualisiert wurde."
+      },
+      "incorrectPrice": {
+        "question": "Was tun, wenn ich einen falschen Preis finde?",
+        "answer": "Sie können den Preis mit einem Daumen nach unten bewerten, wenn er falsch ist, und mit einem Daumen nach oben, wenn er korrekt ist. Dies hilft uns, die Preise genau zu halten."
+      },
+      "earnPoints": {
+        "question": "Wie kann ich Punkte sammeln?",
+        "answer": "Sie sammeln Punkte, indem Sie genaue Kraftstoffpreise einreichen, bestehende Preise überprüfen und zur Community beitragen. Mehr Einreichungen = mehr Punkte!"
+      }
+    },
+    "support": {
+      "title": "Noch Fragen?",
+      "content": "Unser Support-Team ist für Sie da, um Ihnen bei allen Fragen oder Anliegen zu helfen.",
+      "button": "Support kontaktieren"
+    }
+  },
+  "copyright": {
+    "title": "Urheberrechtsinformationen",
+    "subtitle": "Rechtliche Informationen zu GasHunts Inhalten und Diensten",
+    "sections": {
+      "ownership": {
+        "title": "Inhaltseigentum",
+        "content": "Alle Inhalte auf GasHunt sind urheberrechtlich geschützt"
+      },
+      "userContent": {
+        "title": "Nutzergenerierte Inhalte",
+        "content": "Durch das Einreichen von Kraftstoffpreisen und anderen Inhalten an GasHunt gewähren Sie uns eine nicht-exklusive, weltweite, gebührenfreie Lizenz zur Nutzung, Reproduktion, Änderung und Verteilung der Inhalte im Zusammenhang mit unseren Diensten."
+      },
+      "thirdParty": {
+        "title": "Inhalte Dritter",
+        "content": "Markenzeichen, Logos und Dienstleistungsmarken auf GasHunt sind Eigentum ihrer jeweiligen Inhaber."
+      }
+    },
+    "contact": {
+      "title": "DMCA-Konformität",
+      "content": "Wenn Sie der Meinung sind, dass Ihr urheberrechtlich geschütztes Werk in einer Weise kopiert wurde, die eine Urheberrechtsverletzung darstellt, reichen Sie bitte eine Mitteilung gemäß dem Digital Millennium Copyright Act (DMCA) ein.",
+      "button": "DMCA-Mitteilung einreichen"
+    }
+  }
+} 

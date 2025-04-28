@@ -1,0 +1,221 @@
+{
+  "brand": {
+    "name": "GasHunt",
+    "slogan": "Echte Prijzen, Echte Besparingen."
+  },
+  "nav": {
+    "leaderboard": "Ranglijst",
+    "nearbyStations": "Tankstations in de Buurt",
+    "dashboard": "Dashboard",
+    "liveMap": "Live Kaart",
+    "login": "Inloggen",
+    "settings": "Instellingen",
+    "logout": "Uitloggen"
+  },
+  "footer": {
+    "selectLanguage": "Taal Selecteren",
+    "support": "Ondersteuning",
+    "helpCenter": "Helpcentrum",
+    "map": "Kaart",
+    "liveMap": "Live Kaart",
+    "mapInfo": "Kaartinformatie",
+    "about": "Over",
+    "aboutUs": "Over Ons",
+    "copyright": "© 2025 GasHunt. Alle rechten voorbehouden.",
+    "termsOfUse": "Gebruiksvoorwaarden",
+    "privacyPolicy": "Privacybeleid",
+    "copyrightNotice": "Auteursrechtmelding"
+  },
+  "landing": {
+    "title": "Volg Brandstofprijzen in Jouw Regio",
+    "subtitle": "Word een bestuurder die andere bestuurders helpt besparen",
+    "signUp": "Registreren",
+    "learnMore": "Meer Informatie",
+    "communityDriven": "🚗 Door de Gemeenschap Gedreven",
+    "communityText": "Word lid van ons netwerk van bijdragers en maak brandstofprijzen transparant en toegankelijk.",
+    "realTimePrices": "⛽ Realtime Prijzen",
+    "realTimePricesText": "Bekijk eenvoudig de brandstofprijzen in jouw omgeving en tank altijd bij het voordeligste station.",
+    "liveMapHeading": "🗺️ Live Interactieve Kaart",
+    "liveMapHeadingText": "Vind en vergelijk eenvoudig brandstofprijzen in jouw omgeving met onze realtime kaart.",
+    "cityTracker": "📍 Vind de Dichtstbijzijnde Tankstations",
+    "cityTrackerText": "Lokaliseer snel de dichtstbijzijnde tankstations, bijgewerkt door de gemeenschap, en bespaar bij elke tankbeurt."
+  },
+  "terms": {
+    "title": "Gebruiksvoorwaarden 📜",
+    "lastUpdated": "Laatst bijgewerkt: 27 maart 2024",
+    "sections": {
+      "acceptance": {
+        "title": "1. Aanvaarding van Voorwaarden",
+        "content": "Door GasHunt te gebruiken en er toegang toe te krijgen, ga je akkoord met deze Gebruiksvoorwaarden en alle toepasselijke wet- en regelgeving. Als je niet akkoord gaat met een van deze voorwaarden, is het je verboden om deze site te gebruiken of er toegang toe te krijgen."
+      },
+      "userAccounts": {
+        "title": "2. Gebruikersaccounts",
+        "content": "Je moet een account aanmaken om brandstofprijzen in te kunnen dienen. Je bent verantwoordelijk voor het behouden van de vertrouwelijkheid van je account en wachtwoord. Je gaat ermee akkoord verantwoordelijkheid te aanvaarden voor alle activiteiten die onder je account plaatsvinden."
+      },
+      "userContributions": {
+        "title": "3. Gebruikersbijdragen",
+        "content": "Bij het indienen van brandstofprijzen ga je ermee akkoord om accurate en actuele informatie te verstrekken. Het opzettelijk indienen van valse informatie kan resulteren in schorsing of beëindiging van je account."
+      },
+      "privacy": {
+        "title": "4. Privacy",
+        "content": "Je gebruik van GasHunt valt ook onder ons Privacybeleid. Lees ons Privacybeleid om onze praktijken te begrijpen."
+      },
+      "modifications": {
+        "title": "5. Wijzigingen",
+        "content": "We behouden ons het recht voor om deze Voorwaarden op elk moment te wijzigen of te vervangen. We zullen kennisgeving geven van eventuele belangrijke wijzigingen via onze website of door je een e-mail te sturen."
+      }
+    },
+    "questions": {
+      "title": "Vragen over onze Voorwaarden?",
+      "content": "Als je vragen hebt over deze Gebruiksvoorwaarden, neem dan contact met ons op.",
+      "button": "Contact Ondersteuning"
+    }
+  },
+  "privacy": {
+    "title": "Privacybeleid 🔒",
+    "lastUpdated": "Laatst bijgewerkt: 27 maart 2024",
+    "sections": {
+      "informationCollection": {
+        "title": "Informatie die We Verzamelen",
+        "content": "We verzamelen informatie die je ons direct verstrekt, inclusief je naam, e-mailadres en locatiegegevens wanneer je brandstofprijzen indient. We verzamelen ook gebruiksgegevens en apparaatinformatie om onze service te verbeteren."
+      },
+      "informationUse": {
+        "title": "Hoe We Je Informatie Gebruiken",
+        "content": "We gebruiken de verzamelde informatie om onze diensten te leveren en te verbeteren, met je te communiceren en de veiligheid van ons platform te waarborgen. Je locatiegegevens worden gebruikt om relevante brandstofprijzen in jouw omgeving weer te geven."
+      },
+      "dataSecurity": {
+        "title": "Gegevensbeveiliging",
+        "content": "We implementeren passende beveiligingsmaatregelen om je persoonlijke informatie te beschermen. Geen enkele methode van verzending via internet is echter 100% veilig, en we kunnen geen absolute veiligheid garanderen."
+      },
+      "yourRights": {
+        "title": "Jouw Rechten",
+        "content": "Je hebt het recht om toegang te krijgen tot, te corrigeren of je persoonlijke informatie te verwijderen. Je kunt je ook afmelden voor bepaalde gegevensverzameling en -gebruik. Neem contact met ons op om deze rechten uit te oefenen."
+      }
+    },
+    "questions": {
+      "title": "Privacyvragen?",
+      "content": "Als je vragen hebt over onze privacypraktijken, neem dan contact op met ons privacyteam.",
+      "button": "Contact Privacyteam"
+    }
+  },
+  "mapInfo": {
+    "title": "Onze Kaart Begrijpen",
+    "subtitle": "Leer hoe je het meeste uit onze interactieve brandstofprijskaart kunt halen",
+    "features": {
+      "realTimeUpdates": {
+        "title": "Realtime Updates",
+        "description": "Bekijk brandstofprijzen terwijl ze worden bijgewerkt door leden van onze gemeenschap, zodat je altijd de meest recente informatie hebt."
+      },
+      "priceHistory": {
+        "title": "Prijshistorie",
+        "description": "Volg prijstrends in de loop van de tijd met onze tools voor visualisatie van historische gegevens."
+      },
+      "stationDetails": {
+        "title": "Tankstationdetails",
+        "description": "Bekijk uitgebreide informatie over elk tankstation, inclusief voorzieningen, openingstijden en gebruikersrecensies."
+      },
+      "priceAlerts": {
+        "title": "Prijswaarschuwingen",
+        "description": "Stel meldingen in voor wanneer prijzen onder je gewenste drempelwaarde in jouw omgeving dalen."
+      }
+    },
+    "howToUse": {
+      "title": "Hoe de Kaart te Gebruiken",
+      "steps": {
+        "step1": {
+          "title": "Locatie Inschakelen",
+          "description": "Sta locatietoegang toe om tankstations in jouw buurt te vinden"
+        },
+        "step2": {
+          "title": "Prijzen Bekijken",
+          "description": "Klik op tankstations om huidige prijzen en details te bekijken"
+        },
+        "step3": {
+          "title": "Bijdragen",
+          "description": "Help anderen door de prijzen die je ziet bij te werken"
+        }
+      }
+    }
+  },
+  "learnMore": {
+    "title": "Over GasHunt",
+    "subtitle": "Ontdek hoe wij de manier waarop bestuurders de beste brandstofprijzen in hun omgeving vinden revolutioneren.",
+    "mission": {
+      "title": "🎯 Onze Missie",
+      "content": "GasHunt is opgericht met een eenvoudig doel: bestuurders helpen besparen op brandstof via community-gedreven prijsupdates. Wij geloven dat we door samen te werken brandstofprijzen transparanter kunnen maken en iedereen kunnen helpen geïnformeerde beslissingen te nemen over waar te tanken."
+    },
+    "howItWorks": {
+      "title": "⚙️ Hoe het Werkt",
+      "content": "Gebruikers zoals jij dienen realtime brandstofprijzen in wanneer ze deze zien. Ons platform verzamelt deze gegevens en toont ze op een interactieve kaart, waardoor het gemakkelijk is om de beste prijzen in jouw omgeving te vinden. Hoe meer mensen bijdragen, hoe nauwkeuriger en nuttiger de informatie wordt."
+    },
+    "features": {
+      "title": "✨ Belangrijkste Functies",
+      "realTimeUpdates": {
+        "title": "Realtime Updates",
+        "content": "Ontvang de laatste brandstofprijzen zodra ze veranderen, bijgewerkt door onze gemeenschap van gebruikers."
+      },
+      "interactiveMap": {
+        "title": "Interactieve Kaart",
+        "content": "Visualiseer en vergelijk eenvoudig brandstofprijzen in jouw omgeving met onze intuïtieve kaartinterface."
+      },
+      "personalDashboard": {
+        "title": "Persoonlijk Dashboard",
+        "content": "Een dashboard dat je helpt tankstations en prijzen in jouw omgeving bij te houden"
+      }
+    },
+    "cta": {
+      "title": "Klaar om te helpen? 🤝",
+      "button": "Word Vandaag Lid van GasHunt"
+    }
+  },
+  "helpCenter": {
+    "title": "Hoe Kunnen We Je Helpen? 🤔",
+    "subtitle": "Vind antwoorden op veelgestelde vragen en leer hoe je het meeste uit GasHunt kunt halen",
+    "faqs": {
+      "submitPrice": {
+        "question": "Hoe dien ik een brandstofprijs in?",
+        "answer": "Om een brandstofprijs in te dienen, ga je naar de kaart, zoek je jouw tankstation en klik je op de knop 'Prijs Indienen'. Je moet ingelogd zijn om prijzen in te kunnen dienen."
+      },
+      "updateFrequency": {
+        "question": "Hoe vaak worden de prijzen bijgewerkt?",
+        "answer": "De prijzen worden realtime bijgewerkt door onze community-leden. Bij elke prijs wordt getoond wanneer deze voor het laatst is bijgewerkt."
+      },
+      "incorrectPrice": {
+        "question": "Wat als ik een onjuiste prijs vind?",
+        "answer": "Je kunt een duim omlaag geven als de prijs onjuist is en een duim omhoog als deze correct is. Dit helpt ons de prijzen nauwkeurig te houden."
+      },
+      "earnPoints": {
+        "question": "Hoe verdien ik punten?",
+        "answer": "Je verdient punten door nauwkeurige brandstofprijzen in te dienen, bestaande prijzen te verifiëren en bij te dragen aan de community. Meer inzendingen = meer punten!"
+      }
+    },
+    "support": {
+      "title": "Nog Steeds Hulp Nodig?",
+      "content": "Ons supportteam staat klaar om je te helpen met al je vragen of zorgen.",
+      "button": "Contact Support"
+    }
+  },
+  "copyright": {
+    "title": "Auteursrechtinformatie",
+    "subtitle": "Juridische informatie over de inhoud en diensten van GasHunt",
+    "sections": {
+      "ownership": {
+        "title": "Inhoudseigendom",
+        "content": "Alle inhoud op GasHunt is beschermd door auteursrecht"
+      },
+      "userContent": {
+        "title": "Door Gebruikers Gegenereerde Inhoud",
+        "content": "Door brandstofprijzen en andere inhoud naar GasHunt te uploaden, verleen je ons een niet-exclusieve, wereldwijde, royaltyvrije licentie om de inhoud te gebruiken, reproduceren, wijzigen en distribueren in verband met onze diensten."
+      },
+      "thirdParty": {
+        "title": "Inhoud van Derden",
+        "content": "Handelsmerken, logo's en servicenamen op GasHunt zijn eigendom van hun respectievelijke eigenaren."
+      }
+    },
+    "contact": {
+      "title": "DMCA-Naleving",
+      "content": "Als je denkt dat je auteursrechtelijk beschermde werk op een manier is gekopieerd die inbreuk maakt op het auteursrecht, dien dan een melding in volgens de Digital Millennium Copyright Act (DMCA).",
+      "button": "DMCA-Melding Indienen"
+    }
+  }
+} 
