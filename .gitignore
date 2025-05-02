@@ -5,6 +5,10 @@ config/keys/
 # Node modules
 node_modules/
 
+# Next.js build output
+.next/
+.next/cache/
+
 # Logs
 logs
 *.log
