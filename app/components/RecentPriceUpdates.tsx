@@ -1,9 +1,17 @@
+/**
+ * Component for displaying recent fuel price updates with voting functionality
+ * Shows a list of price submissions with their associated metadata and user interactions
+ */
 "use client";
 
 import { FaMoneyBillWave, FaTrash, FaThumbsUp, FaThumbsDown, FaInfoCircle } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip';
 import toast from 'react-hot-toast';
 
+/**
+ * Interface representing a grouped price update submission
+ * Contains information about the submission, submitter, and individual fuel price updates
+ */
 interface GroupedPriceUpdate {
   submissionId: string;
   submittedBy: {
@@ -25,6 +33,9 @@ interface GroupedPriceUpdate {
   isInvalidated: boolean;
 }
 
+/**
+ * Props interface for the RecentPriceUpdates component
+ */
 interface RecentPriceUpdatesProps {
   groupedUpdates: GroupedPriceUpdate[];
   user: any;
@@ -40,6 +51,10 @@ export default function RecentPriceUpdates({
   handleVote,
   userVotes
 }: RecentPriceUpdatesProps) {
+  /**
+   * Renders the voting buttons for a price update submission
+   * Handles vote state, user restrictions, and visual feedback
+   */
   const renderVoteButtons = (group: GroupedPriceUpdate) => {
     const isOwnSubmission = user?._id === group.submittedBy._id;
     const currentVote = userVotes[group.submissionId];
@@ -99,6 +114,7 @@ export default function RecentPriceUpdates({
 
       <div className="space-y-4">
         {groupedUpdates.map((group) => {
+          // Calculate time difference for status indicators
           const updateTime = new Date(group.createdAt);
           const now = new Date();
           const hoursDiff = (now.getTime() - updateTime.getTime()) / (1000 * 60 * 60);
@@ -110,6 +126,7 @@ export default function RecentPriceUpdates({
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap gap-2 mb-2">
                     {group.updates.map((update) => {
+                      // Color mapping for different fuel types
                       const fuelTypeColors = {
                         PETROL: 'bg-green-100 text-green-800',
                         DIESEL: 'bg-blue-100 text-blue-800',
@@ -143,6 +160,7 @@ export default function RecentPriceUpdates({
                 
                 <div className="flex items-center justify-between sm:justify-end gap-4">
                   {renderVoteButtons(group)}
+                  {/* Show delete button only for user's own submissions */}
                   {user?._id === group.submittedBy._id && (
                     <button
                       onClick={() => handleDeleteSubmission(group.submissionId)}
@@ -154,6 +172,7 @@ export default function RecentPriceUpdates({
                   )}
                 </div>
               </div>
+              {/* Show warning message for outdated submissions */}
               {hoursDiff > 24 && (
                 <div className="mt-2 bg-red-50 border border-red-100 rounded-lg p-2">
                   <p className="text-xs text-red-600 flex items-center gap-1">

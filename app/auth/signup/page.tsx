@@ -21,6 +21,10 @@ import { motion } from "framer-motion";
 import { fadeInFromBottom, landingStaggerContainer } from "@/app/animations/variants";
 import toast from 'react-hot-toast';
 
+/**
+ * Interface for the API response after successful signup
+ * Contains user details and authentication token
+ */
 interface SignupResponse {
   _id: string;
   name: string;
@@ -29,14 +33,19 @@ interface SignupResponse {
 }
 
 const SignUp: React.FC = () => {
+  // State for password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  // State for password validation rules
   const [passwordValid, setPasswordValid] = useState({
-    length: false,
-    number: false,
-    lowercase: false,
-    uppercase: false,
+    length: false,    // Minimum 8 characters
+    number: false,    // Contains at least one number
+    lowercase: false, // Contains at least one lowercase letter
+    uppercase: false, // Contains at least one uppercase letter
   });
+  
+  // State for form validation and submission
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [touched, setTouched] = useState({
@@ -56,10 +65,19 @@ const SignUp: React.FC = () => {
   const router = useRouter();
   const auth = useAuth();
 
+  /**
+   * Validates email format using regex
+   * @param email - Email string to validate
+   * @returns boolean indicating if email is valid
+   */
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
+  /**
+   * Marks a form field as touched when it loses focus
+   * Used to show validation errors only after user interaction
+   */
   const handleBlur = (field: keyof typeof touched) => {
     setTouched(prev => ({
       ...prev,
@@ -67,15 +85,23 @@ const SignUp: React.FC = () => {
     }));
   };
 
+  /**
+   * Checks if all form fields meet validation requirements
+   * @returns boolean indicating if form is valid
+   */
   const isFormValid = () => {
     return (
-      formData.name.length >= 2 &&
-      validateEmail(formData.email) &&
-      Object.values(passwordValid).every(Boolean) &&
-      formData.password === formData.confirmPassword
+      formData.name.length >= 2 && // Name must be at least 2 characters
+      validateEmail(formData.email) && // Email must be valid format
+      Object.values(passwordValid).every(Boolean) && // All password rules must be met
+      formData.password === formData.confirmPassword // Passwords must match
     );
   };
 
+  /**
+   * Handles form field changes and updates validation state
+   * For password field, checks against all validation rules
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -93,6 +119,11 @@ const SignUp: React.FC = () => {
     }
   };
 
+  /**
+   * Handles form submission
+   * Validates form data and makes API call to register user
+   * Shows success/error messages using toast notifications
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -137,7 +168,11 @@ const SignUp: React.FC = () => {
     }
   };
 
-  // Google Sign In Handler
+  /**
+   * Handles Google OAuth sign-in
+   * Uses NextAuth.js for authentication
+   * Shows loading state and error messages
+   */
   const handleGoogleSignIn = async () => {
     try {
       setGoogleLoading(true);
@@ -215,7 +250,7 @@ const SignUp: React.FC = () => {
                 </motion.div>
               )}
 
-              {/* Name Field */}
+              {/* Name Field with validation feedback */}
               <motion.div 
                 className="mb-6 relative"
                 variants={fadeInFromBottom}

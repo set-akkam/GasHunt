@@ -4,6 +4,7 @@ import { fadeInFromBottom, landingStaggerContainer } from "../animations/variant
 import { useLanguage } from "../providers/LanguageProvider";
 import { useEffect, useState } from "react";
 
+// TypeScript interface defining the structure of translations for the About page
 interface Translations {
   about: {
     title: string;
@@ -50,22 +51,27 @@ interface Translations {
   };
 }
 
+// Main About page component
 export default function About() {
+  // Get current language from context
   const { language } = useLanguage();
+  // State to store loaded translations
   const [translations, setTranslations] = useState<Translations | null>(null);
 
+  // Load translations when language changes
   useEffect(() => {
-    // Load translations
     fetch(`/locales/${language}/common.json`)
       .then(res => res.json())
       .then(data => setTranslations(data))
       .catch(err => console.error('Error loading translations:', err));
   }, [language]);
 
+  // Show nothing while translations are loading
   if (!translations) {
-    return null; // Or a loading spinner
+    return null;
   }
 
+  // Prepare stats data for rendering
   const stats = [
     translations.about.stats.fuelPriceRise,
     translations.about.stats.activeDrivers,
@@ -73,6 +79,7 @@ export default function About() {
     translations.about.stats.fuelVolume
   ];
 
+  // Prepare values data for rendering
   const values = [
     {
       title: translations.about.sections.ourValues.transparency.title,
@@ -89,8 +96,9 @@ export default function About() {
   ];
 
   return (
+    // Main container with gradient background
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      {/* Hero Section */}
+      {/* Hero Section with animated title and subtitle */}
       <div className="w-full bg-green-700 py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <motion.h1
@@ -114,7 +122,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* Stats Section with animated cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 -mt-8 sm:-mt-10 md:-mt-12">
         <motion.div
           variants={landingStaggerContainer}
@@ -137,6 +145,7 @@ export default function About() {
         </motion.div>
       </div>
 
+      {/* Main Content Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-12 md:py-16">
         {/* Who We Are Section */}
         <motion.div
@@ -162,7 +171,7 @@ export default function About() {
           </motion.p>
         </motion.div>
 
-        {/* Values Section */}
+        {/* Values Section with animated cards */}
         <motion.div
           variants={landingStaggerContainer}
           initial="hidden"

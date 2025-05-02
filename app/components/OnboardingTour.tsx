@@ -1,9 +1,25 @@
+/**
+ * OnboardingTour Component
+ * 
+ * A guided tour component that helps new users understand the application's key features.
+ * Uses Framer Motion for smooth animations and provides a step-by-step walkthrough
+ * of the application's main features.
+ */
+
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOnboarding } from '../providers/OnboardingProvider';
 import toast from 'react-hot-toast';
 import { FaTimes, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 
+/**
+ * Interface defining the structure of each tour step
+ * @property target - CSS selector for the element to highlight
+ * @property title - Step title shown in the tooltip
+ * @property content - Step description shown in the tooltip
+ * @property position - Tooltip position relative to the target element
+ * @property offset - Optional offset to adjust tooltip positioning
+ */
 interface Step {
   target: string;
   title: string;
@@ -12,6 +28,10 @@ interface Step {
   offset?: { x: number; y: number };
 }
 
+/**
+ * Array of tour steps defining the onboarding flow
+ * Each step highlights a different feature of the application
+ */
 const steps: Step[] = [
   {
     target: '[data-tour="starred-stations"]',
@@ -34,9 +54,16 @@ const steps: Step[] = [
   },
 ];
 
+/**
+ * OnboardingTour Component
+ * 
+ * Renders a guided tour overlay that highlights key features of the application.
+ * The tour is only shown to first-time visitors and can be skipped or navigated through.
+ */
 export default function OnboardingTour() {
   const { currentStep, setCurrentStep, completeOnboarding, isFirstVisit } = useOnboarding();
 
+  // Don't render the tour if the user has already completed it
   if (!isFirstVisit) return null;
 
   const currentStepData = steps[currentStep];
@@ -45,6 +72,10 @@ export default function OnboardingTour() {
 
   if (!targetRect) return null;
 
+  /**
+   * Calculates the tooltip position based on the target element's position
+   * and the specified offset and position preferences
+   */
   const getTooltipPosition = () => {
     const padding = 12;
     const offset = currentStepData.offset || { x: 0, y: 0 };
@@ -75,6 +106,9 @@ export default function OnboardingTour() {
 
   const position = getTooltipPosition();
 
+  /**
+   * Handles moving to the next step or completing the tour
+   */
   const handleNext = () => {
     if (currentStep === steps.length - 1) {
       completeOnboarding();
@@ -83,12 +117,19 @@ export default function OnboardingTour() {
     }
   };
 
+  /**
+   * Handles moving to the previous step
+   */
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
+  /**
+   * Handles skipping the entire tour
+   * Shows a toast notification with help information
+   */
   const handleSkip = () => {
     completeOnboarding();
     toast('You can always find help in the menu', {
@@ -99,7 +140,9 @@ export default function OnboardingTour() {
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 pointer-events-none">
+        {/* Semi-transparent overlay */}
         <div className="absolute inset-0 bg-black/20" />
+        {/* Animated tooltip container */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -112,6 +155,7 @@ export default function OnboardingTour() {
           className="fixed w-[300px] bg-white rounded-xl shadow-xl pointer-events-auto"
         >
           <div className="p-4">
+            {/* Tooltip header with title and close button */}
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-lg font-semibold text-gray-900">
                 {currentStepData.title}
@@ -123,10 +167,13 @@ export default function OnboardingTour() {
                 <FaTimes />
               </button>
             </div>
+            {/* Tooltip content */}
             <p className="text-gray-600 mb-4">
               {currentStepData.content}
             </p>
+            {/* Navigation controls */}
             <div className="flex justify-between items-center">
+              {/* Step indicators */}
               <div className="flex gap-1">
                 {steps.map((_, index) => (
                   <div
@@ -137,6 +184,7 @@ export default function OnboardingTour() {
                   />
                 ))}
               </div>
+              {/* Navigation buttons */}
               <div className="flex gap-2">
                 {currentStep > 0 && (
                   <button

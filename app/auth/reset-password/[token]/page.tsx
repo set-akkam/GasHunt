@@ -10,22 +10,43 @@ import { motion } from "framer-motion";
 import { fadeInFromBottom, landingStaggerContainer } from "@/app/animations/variants";
 import toast from 'react-hot-toast';
 
+/**
+ * ResetPassword Component
+ * Handles the password reset process after a user clicks on a reset password link
+ * Features:
+ * - Password validation with requirements
+ * - Password visibility toggle
+ * - Form submission with API integration
+ * - Error handling and user feedback
+ * - Animated UI elements
+ */
 const ResetPassword: React.FC = () => {
+  // Router for navigation
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  
+  // State management
+  const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
+  const [error, setError] = useState(''); // Store error messages
+  const [isLoading, setIsLoading] = useState(false); // Loading state for form submission
+  
+  // Password validation state
   const [passwordValid, setPasswordValid] = useState({
-    length: false,
-    number: false,
-    lowercase: false,
-    uppercase: false,
+    length: false, // Minimum 8 characters
+    number: false, // Contains number
+    lowercase: false, // Contains lowercase
+    uppercase: false, // Contains uppercase
   });
+
+  // Form data state
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: '',
   });
 
+  /**
+   * Handles input changes and validates password requirements
+   * @param e - Input change event
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -33,6 +54,7 @@ const ResetPassword: React.FC = () => {
       [name]: value
     }));
 
+    // Validate password requirements when password field changes
     if (name === 'password') {
       setPasswordValid({
         length: value.length >= 8,
@@ -43,10 +65,17 @@ const ResetPassword: React.FC = () => {
     }
   };
 
+  /**
+   * Handles form submission
+   * Validates passwords match and requirements are met
+   * Makes API call to reset password
+   * @param e - Form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
+    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
       const errorMsg = 'Passwords do not match';
       setError(errorMsg);
@@ -54,6 +83,7 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
+    // Validate all password requirements are met
     if (!Object.values(passwordValid).every(Boolean)) {
       const errorMsg = 'Please meet all password requirements';
       setError(errorMsg);
@@ -64,6 +94,7 @@ const ResetPassword: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Extract token from URL
       const token = window.location.pathname.split('/').pop() || '';
       const response = await authApi.resetPassword(token, formData.password);
       
@@ -71,6 +102,7 @@ const ResetPassword: React.FC = () => {
         throw new Error(response.error);
       }
 
+      // Show success message and redirect to login
       toast.success('Password reset successful! Please login with your new password.');
       router.push('/auth/login?reset=success');
     } catch (err) {
@@ -83,9 +115,10 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
+    // Main container with green background
     <div className="flex min-h-screen bg-[#1c7b47]">
       <div className="flex w-full">
-        {/* Left Side - Form */}
+        {/* Left Side - Form Section */}
         <motion.div 
           className="w-full md:w-1/2 bg-white p-10 flex flex-col justify-center rounded-r-3xl shadow-lg"
           variants={landingStaggerContainer}
@@ -93,6 +126,7 @@ const ResetPassword: React.FC = () => {
           animate="visible"
         >
           <div className="max-w-md mx-auto w-full">
+            {/* Back button */}
             <motion.div 
               className="mb-6"
               variants={fadeInFromBottom}
@@ -105,6 +139,7 @@ const ResetPassword: React.FC = () => {
               </Link>
             </motion.div>
 
+            {/* Page title */}
             <motion.div 
               className="mb-8"
               variants={fadeInFromBottom}
@@ -113,6 +148,7 @@ const ResetPassword: React.FC = () => {
               <h1 className="text-5xl font-bold">New Password</h1>
             </motion.div>
             
+            {/* Instructions */}
             <motion.p 
               className="text-lg text-gray-500 mb-8"
               variants={fadeInFromBottom}
@@ -121,11 +157,13 @@ const ResetPassword: React.FC = () => {
               Please enter your new password below
             </motion.p>
 
+            {/* Main form */}
             <motion.form 
               onSubmit={handleSubmit}
               variants={fadeInFromBottom}
               custom={0.6}
             >
+              {/* Error message display */}
               {error && (
                 <motion.div 
                   className="rounded-md bg-red-50 p-4 mb-6"
@@ -135,7 +173,7 @@ const ResetPassword: React.FC = () => {
                 </motion.div>
               )}
 
-              {/* Password Field */}
+              {/* Password input field with visibility toggle */}
               <motion.div 
                 className="mb-6 relative"
                 variants={fadeInFromBottom}
@@ -162,7 +200,7 @@ const ResetPassword: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Password Requirements */}
+              {/* Password requirements checklist */}
               <motion.div 
                 className="mb-6 text-xs text-gray-500"
                 variants={fadeInFromBottom}
@@ -182,7 +220,7 @@ const ResetPassword: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Confirm Password Field */}
+              {/* Confirm password input field */}
               <motion.div 
                 className="mb-6 relative"
                 variants={fadeInFromBottom}
@@ -202,6 +240,7 @@ const ResetPassword: React.FC = () => {
                 </div>
               </motion.div>
 
+              {/* Submit button */}
               <motion.div 
                 className="flex flex-col md:flex-row items-center justify-between mb-6"
                 variants={fadeInFromBottom}
@@ -220,19 +259,21 @@ const ResetPassword: React.FC = () => {
           </div>
         </motion.div>
         
-        {/* Right Side - Illustration/Features */}
+        {/* Right Side - Illustration Section */}
         <motion.div 
           className="hidden md:flex md:w-1/2 bg-[#1c7b47] rounded-l-3xl justify-center items-center p-8 relative overflow-hidden"
           variants={landingStaggerContainer}
           initial="hidden"
           animate="visible"
         >
+          {/* Decorative background element */}
           <motion.div 
             className="absolute top-0 right-0 w-full h-full bg-green-400 rounded-bl-[30%]"
             variants={fadeInFromBottom}
             custom={0.2}
           ></motion.div>
           
+          {/* Feature card */}
           <motion.div 
             className="relative z-10"
             variants={fadeInFromBottom}

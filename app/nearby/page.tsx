@@ -679,8 +679,8 @@ export default function NearbyStationsPage() {
           </div>
 
           {/* Map Section - Now Second */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden order-1 lg:order-2">
-            <div className="h-[500px] sm:h-[600px] relative">
+          <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden order-1 lg:order-2 flex flex-col">
+            <div className="flex-grow h-full min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] relative">
               {mapCenter && showMap && (
                 <StableMapWrapper
                   key={`map-${mapCenter[0].toFixed(4)}-${mapCenter[1].toFixed(4)}-${selectedRadius}`}

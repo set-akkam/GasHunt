@@ -1,3 +1,11 @@
+/**
+ * PriceHistoryGraph Component
+ * 
+ * A data visualization component that displays fuel price history for a specific station
+ * using Chart.js. Supports multiple fuel types with different colors and provides
+ * interactive tooltips and responsive design.
+ */
+
 import { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
@@ -12,6 +20,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
+// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,6 +31,13 @@ ChartJS.register(
   Legend
 );
 
+/**
+ * Interface defining the structure of price history data
+ * @property stationId - Unique identifier for the gas station
+ * @property fuelType - Type of fuel (e.g., PETROL, DIESEL)
+ * @property price - Price of the fuel
+ * @property recordedAt - Timestamp when the price was recorded
+ */
 interface PriceHistoryData {
   stationId: number;
   fuelType: string;
@@ -29,11 +45,18 @@ interface PriceHistoryData {
   recordedAt: string;
 }
 
+/**
+ * Props interface for the PriceHistoryGraph component
+ * @property stationId - ID of the station to fetch price history for
+ */
 interface PriceHistoryGraphProps {
   stationId: number;
 }
 
-// Color mapping for different fuel types
+/**
+ * Color mapping for different fuel types
+ * Each fuel type has a border color and a semi-transparent background color
+ */
 const FUEL_COLORS = {
   PETROL: {
     border: 'rgb(34, 197, 94)', // green-500
@@ -53,18 +76,32 @@ const FUEL_COLORS = {
   }
 };
 
-// Function to get fuel display name
+/**
+ * Converts fuel type string to a display-friendly format
+ * @param fuelType - Raw fuel type string (e.g., "PETROL_PREMIUM")
+ * @returns Formatted string (e.g., "Petrol Premium")
+ */
 const getFuelDisplayName = (fuelType: string): string => {
   return fuelType.split('_').map(word => 
     word.charAt(0) + word.slice(1).toLowerCase()
   ).join(' ');
 };
 
+/**
+ * PriceHistoryGraph Component
+ * 
+ * Displays a line chart showing the price history of different fuel types
+ * for a specific gas station over the last 7 days.
+ */
 export default function PriceHistoryGraph({ stationId }: PriceHistoryGraphProps) {
   const [priceHistory, setPriceHistory] = useState<PriceHistoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Fetches price history data from the API
+   * Updates loading and error states accordingly
+   */
   useEffect(() => {
     const fetchPriceHistory = async () => {
       try {
@@ -97,6 +134,7 @@ export default function PriceHistoryGraph({ stationId }: PriceHistoryGraphProps)
     }
   }, [stationId]);
 
+  // Early returns for different states
   if (!stationId) {
     return <div className="h-64 flex items-center justify-center text-gray-500">No station selected</div>;
   }
@@ -117,7 +155,10 @@ export default function PriceHistoryGraph({ stationId }: PriceHistoryGraphProps)
     );
   }
 
-  // Group data by fuel type
+  /**
+   * Process data for chart display
+   * Groups data by fuel type and prepares datasets for Chart.js
+   */
   const fuelTypes = [...new Set(priceHistory.map(record => record.fuelType))];
   const datasets = fuelTypes.map(fuelType => {
     const fuelData = priceHistory
@@ -141,6 +182,10 @@ export default function PriceHistoryGraph({ stationId }: PriceHistoryGraphProps)
     };
   });
 
+  /**
+   * Chart configuration options
+   * Defines the appearance and behavior of the chart
+   */
   const options: ChartOptions<'line'> = {
     responsive: true,
     plugins: {
@@ -199,6 +244,10 @@ export default function PriceHistoryGraph({ stationId }: PriceHistoryGraphProps)
     }
   };
 
+  /**
+   * Chart data structure
+   * Combines processed datasets with date labels
+   */
   const data = {
     labels: priceHistory
       .filter(record => record.fuelType === fuelTypes[0])

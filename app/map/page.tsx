@@ -161,6 +161,7 @@ export default function MapPage(): JSX.Element {
   /**
    * Fetches station data from the API or uses test data
    * Attempts to use user's location, falls back to Dublin center
+   * Handles various error cases and provides detailed logging
    */
   const fetchStations = async () => {
     try {
@@ -215,52 +216,65 @@ export default function MapPage(): JSX.Element {
       console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
 
       console.log('Making API request...');
-      const response = await fetch(apiUrl, {
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-      
-      console.log('API Response status:', response.status);
-      console.log('API Response status text:', response.statusText);
-
-      if (!response.ok) {
-        console.error('API Response not OK:', {
-          status: response.status,
-          statusText: response.statusText,
-          url: apiUrl
+      try {
+        const response = await fetch(apiUrl, {
+          headers: {
+            'Accept': 'application/json'
+          },
+          // Add mode and credentials for better error handling
+          mode: 'cors',
+          credentials: 'include'
         });
-        const errorText = await response.text();
-        console.error('Error response body:', errorText);
-        throw new Error("Failed to fetch stations");
-      }
+        
+        console.log('API Response status:', response.status);
+        console.log('API Response status text:', response.statusText);
 
-      const data = await handleApiResponse(response);
-      console.log('\nAPI Response data:', data);
-      
-      if (!Array.isArray(data)) {
-        console.error('API response is not an array:', data);
-        throw new Error("Invalid response format");
-      }
-      
-      // Transform the data to match the StationWithPrices interface
-      const transformedStations = data.map((station: any) => ({
-        ...station,
-        stationId: station.stationId || station.stationid,
-        location: station.location || {
-          lat: station.latitude,
-          lng: station.longitude
-        },
-        prices: {
-          diesel: station.prices?.diesel || { price: 0, updatedAt: new Date().toISOString() },
-          petrol: station.prices?.petrol || { price: 0, updatedAt: new Date().toISOString() }
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API Response not OK:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorText
+          });
+          throw new Error(`API request failed: ${response.status} ${response.statusText}`);
         }
-      }));
 
-      console.log('\nTransformed stations:', transformedStations);
-      console.log('Number of stations:', transformedStations.length);
+        const data = await handleApiResponse(response);
+        console.log('\nAPI Response data:', data);
+        
+        if (!Array.isArray(data)) {
+          console.error('API response is not an array:', data);
+          throw new Error("Invalid response format");
+        }
+        
+        // Transform the data to match the StationWithPrices interface
+        const transformedStations = data.map((station: any) => ({
+          ...station,
+          stationId: station.stationId || station.stationid,
+          location: station.location || {
+            lat: station.latitude,
+            lng: station.longitude
+          },
+          prices: {
+            diesel: station.prices?.diesel || { price: 0, updatedAt: new Date().toISOString() },
+            petrol: station.prices?.petrol || { price: 0, updatedAt: new Date().toISOString() }
+          }
+        }));
 
-      setStations(transformedStations);
+        console.log('\nTransformed stations:', transformedStations);
+        console.log('Number of stations:', transformedStations.length);
+
+        setStations(transformedStations);
+      } catch (error) {
+        console.error('Error fetching stations:', error);
+        if (error instanceof Error) {
+          console.error('Error details:', error.message);
+          console.error('Error stack:', error.stack);
+        }
+        setError("Failed to load fuel stations");
+      } finally {
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error('Error fetching stations:', error);
       if (error instanceof Error) {
@@ -268,8 +282,6 @@ export default function MapPage(): JSX.Element {
         console.error('Error stack:', error.stack);
       }
       setError("Failed to load fuel stations");
-    } finally {
-      setIsLoading(false);
     }
   };
 

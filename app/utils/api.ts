@@ -399,3 +399,30 @@ export const getRecentFuelPrices = async (limit?: number, token?: string): Promi
     return [];
   }
 };
+
+export async function getStations(params: {
+  lat: number;
+  lng: number;
+  radius: number;
+  bounds?: {
+    sw: { lat: number; lng: number };
+    ne: { lat: number; lng: number };
+  };
+}) {
+  const { lat, lng, radius, bounds } = params;
+  
+  // Construct the API URL
+  let url = `${process.env.NEXT_PUBLIC_API_URL}/api/stations/nearby?lat=${lat}&lng=${lng}&radius=${radius}`;
+  
+  if (bounds) {
+    url += `&bounds=${bounds.ne.lat},${bounds.ne.lng},${bounds.sw.lat},${bounds.sw.lng}`;
+  }
+
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch stations');
+  }
+
+  return response.json();
+}

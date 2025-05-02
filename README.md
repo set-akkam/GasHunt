@@ -2,146 +2,101 @@
 
 A web application that allows users to track and share fuel prices at different stations in real-time.
 
-## Features
+## Prerequisites
 
-### User Authentication
-- User registration and login
-- Password reset functionality via email
-- Secure authentication using JWT tokens
-- Profile management (username and password updates)
-
-### Core Functionality
-- Interactive map interface for finding fuel stations
-- Real-time fuel price submissions (login required)
-- Multiple fuel type support
-- Voting system for price accuracy
-- Station-specific price history
-- Leaderboard system
-- Dashboard for user statistics
-- OCR fuel price extraction from photos
-- Price validation based on Ireland's historical fuel price ranges (€1.10-€2.30)
-
-### Pages
-- `/landing` - Welcome page
-- `/dashboard` - User dashboard
-- `/map` - Interactive fuel station map
-- `/station` - Individual station details
-- `/leaderboard` - User contribution rankings
-- `/test-map` - Testing environment for map features
-
-## Technical Stack
-
-### Frontend
-- Next.js 13+ (App Router)
-- React
-- TailwindCSS for styling
-- Server-side and client-side rendering capabilities
-
-### Backend Services
-- Google Cloud Vision API for OCR processing
-- Image preprocessing with Sharp
-
-### Development Tools
-- TypeScript support
-- ESLint for code quality
-- PostCSS for CSS processing
-- Environment variable support
+- Node.js (v18 or higher)
+- npm or yarn
+- Google Cloud account (for OCR functionality)
+- Git
 
 ## Getting Started
 
-1. Clone the repository
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd fuel-price-tracker
+```
+
 2. Install dependencies:
 ```bash
 npm install
-```
-3. Create a `.env.local` file with required environment variables
-4. Run the development server:
-```bash
-npm run dev
+# or
+yarn install
 ```
 
-## Environment Variables
-Create a `.env.local` file with:
-- Required API keys
-- Backend service URLs
-- Other configuration variables
+3. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```env
+# Authentication
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
 
-### Google Cloud Vision API Setup
-To use the OCR feature, you need to set up the Google Cloud Vision API:
+# Google Cloud Vision API
+GOOGLE_APPLICATION_CREDENTIALS=config/keys/google-cloud-credentials.json
 
-1. Create a Google Cloud project
-2. Enable the Cloud Vision API
-3. Create a service account and download the JSON key file
-4. Place the key file in `config/keys/google-cloud-credentials.json`
-5. Add `GOOGLE_APPLICATION_CREDENTIALS=config/keys/google-cloud-credentials.json` to your `.env` file
+# Add other environment variables as needed
+```
 
-## OCR Fuel Price Extraction
+4. Set up Google Cloud Vision API:
+   - Create a Google Cloud project
+   - Enable the Cloud Vision API
+   - Create a service account and download the JSON key file
+   - Place the key file in `config/keys/google-cloud-credentials.json`
 
-The OCR feature allows users to submit fuel prices by taking photos of price signs, making the submission process faster and more convenient.
-
-### How it Works
-
-1. **Image Capture**: Users can take photos directly through the app or upload an existing image.
-2. **Image Processing**: 
-   - Server-side preprocessing improves image quality for better OCR results
-   - Adjusts contrast, sharpness, and brightness
-   - Reduces noise
-3. **Text Extraction**:
-   - Google Cloud Vision API extracts all text from the image
-4. **Price Recognition**:
-   - Advanced parsing algorithms identify fuel prices
-   - Matches prices with correct fuel types (Regular, Premium, Diesel)
-   - Handles various price formats (e.g., €1.99, 199, $1.99)
-5. **User Verification**:
-   - Detected prices are displayed for user verification before submission
-   - Users can correct any misidentified prices
-   - Original image is shown alongside extracted prices for reference
-
-### Handling OCR Challenges
-
-The system includes several features to overcome common OCR challenges:
-
-- **Client-side guidance** for taking clear photos
-- **Server-side image preprocessing** to enhance text detection
-- **Robust parsing logic** to handle diverse price formats and layouts
-- **User confirmation step** to verify results before submission
-- **Rate limiting** to manage API costs and prevent abuse
-
-## Project Structure
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
+5. Start the development server:
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint to check code quality
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+- `/app` - Next.js app router pages and components
+- `/backend` - Express server and API routes
+- `/config` - Configuration files and credentials
+- `/contexts` - React context providers
+- `/public` - Static assets
+- `/types` - TypeScript type definitions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Real-time fuel price tracking
+- Interactive map interface
+- OCR fuel price extraction from photos
+- User authentication
+- Price history and statistics
+- Leaderboard system
 
-## Deploy on Vercel
+## Technologies Used
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next.js 13+ (App Router)
+- React
+- TypeScript
+- TailwindCSS
+- Google Cloud Vision API
+- Express.js
+- Socket.IO
+- Chart.js
+- Leaflet Maps
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

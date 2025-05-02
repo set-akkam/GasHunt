@@ -1,3 +1,9 @@
+/**
+ * Login Page Component
+ * 
+ * A responsive login page with email/password authentication and social login options.
+ * Features form validation, error handling, and animated UI elements.
+ */
 "use client"
 
 import React, { useState, useEffect } from 'react';
@@ -20,6 +26,7 @@ import { motion } from "framer-motion";
 import { fadeInFromBottom, landingStaggerContainer } from "@/app/animations/variants";
 import toast from 'react-hot-toast';
 
+// Interface for login response data
 interface LoginResponse {
   _id: string;
   name: string;
@@ -28,9 +35,12 @@ interface LoginResponse {
 }
 
 const Login: React.FC = () => {
+  // Initialize hooks and state
   const router = useRouter();
   const searchParams = useSearchParams();
   const auth = useAuth();
+  
+  // Form state management
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -45,6 +55,7 @@ const Login: React.FC = () => {
   });
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  // Handle success messages from URL parameters
   useEffect(() => {
     const message = searchParams.get('message');
     if (message) {
@@ -52,10 +63,19 @@ const Login: React.FC = () => {
     }
   }, [searchParams]);
 
+  /**
+   * Validates email format using regex
+   * @param email - Email address to validate
+   * @returns boolean indicating if email is valid
+   */
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
+  /**
+   * Handles field blur events to update touched state
+   * @param field - Name of the form field that was blurred
+   */
   const handleBlur = (field: keyof typeof touched) => {
     setTouched(prev => ({
       ...prev,
@@ -63,10 +83,18 @@ const Login: React.FC = () => {
     }));
   };
 
+  /**
+   * Validates the entire form
+   * @returns boolean indicating if form is valid
+   */
   const isFormValid = () => {
     return validateEmail(formData.email) && formData.password.length >= 6;
   };
 
+  /**
+   * Handles form submission
+   * @param e - Form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -81,6 +109,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Attempt to sign in with credentials
       const result = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
@@ -93,6 +122,7 @@ const Login: React.FC = () => {
 
       if (result?.ok) {
         toast.success('Successfully logged in!');
+        // Handle redirect after successful login
         const returnUrl = searchParams.get('return_url');
         const redirectPath = returnUrl && returnUrl.startsWith('/') 
           ? returnUrl
@@ -108,6 +138,10 @@ const Login: React.FC = () => {
     }
   };
 
+  /**
+   * Handles form input changes
+   * @param e - Input change event
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -116,6 +150,9 @@ const Login: React.FC = () => {
     }));
   };
 
+  /**
+   * Handles Google sign-in process
+   */
   const handleGoogleSignIn = async () => {
     try {
       setGoogleLoading(true);
@@ -137,9 +174,10 @@ const Login: React.FC = () => {
   };
 
   return (
+    // Main container with background color
     <div className="flex min-h-screen bg-[#1c7b47]">
       <div className="flex w-full">
-        {/* Left Side - Form */}
+        {/* Left Side - Login Form Section */}
         <motion.div 
           className="w-full md:w-1/2 bg-white p-10 flex flex-col justify-center rounded-r-3xl shadow-lg"
           variants={landingStaggerContainer}
@@ -147,6 +185,7 @@ const Login: React.FC = () => {
           animate="visible"
         >
           <div className="max-w-md mx-auto w-full">
+            {/* Back button */}
             <motion.div 
               className="mb-6"
               variants={fadeInFromBottom}
@@ -159,6 +198,7 @@ const Login: React.FC = () => {
               </Link>
             </motion.div>
 
+            {/* Header section with title and signup link */}
             <motion.div 
               className="flex justify-between items-center mb-8"
               variants={fadeInFromBottom}
@@ -170,6 +210,7 @@ const Login: React.FC = () => {
               </p>
             </motion.div>
             
+            {/* Welcome message */}
             <motion.p 
               className="text-lg text-gray-500 mb-8"
               variants={fadeInFromBottom}
@@ -178,11 +219,13 @@ const Login: React.FC = () => {
               👋 Welcome back! Please enter your details
             </motion.p>
 
+            {/* Login Form */}
             <motion.form 
               onSubmit={handleSubmit}
               variants={fadeInFromBottom}
               custom={0.6}
             >
+              {/* Error message display */}
               {error && (
                 <motion.div 
                   className="rounded-md bg-red-50 p-4 mb-6"
@@ -192,6 +235,7 @@ const Login: React.FC = () => {
                 </motion.div>
               )}
 
+              {/* Success message display */}
               {successMessage && (
                 <motion.div 
                   className="rounded-md bg-green-50 p-4 mb-6"
@@ -201,7 +245,7 @@ const Login: React.FC = () => {
                 </motion.div>
               )}
 
-              {/* Email Field */}
+              {/* Email Input Field */}
               <motion.div 
                 className="mb-6 relative"
                 variants={fadeInFromBottom}
@@ -232,12 +276,13 @@ const Login: React.FC = () => {
                     required
                   />
                 </div>
+                {/* Email validation error message */}
                 {touched.email && !validateEmail(formData.email) && (
                   <p className="text-red-500 text-xs mt-1">Please enter a valid email address</p>
                 )}
               </motion.div>
 
-              {/* Password Field */}
+              {/* Password Input Field */}
               <motion.div 
                 className="mb-6 relative"
                 variants={fadeInFromBottom}
@@ -268,6 +313,7 @@ const Login: React.FC = () => {
                       onBlur={() => handleBlur('password')}
                       required
                     />
+                    {/* Password visibility toggle button */}
                     <button 
                       type="button" 
                       onClick={() => setShowPassword(!showPassword)}
@@ -277,11 +323,13 @@ const Login: React.FC = () => {
                     </button>
                   </div>
                 </div>
+                {/* Password validation error message */}
                 {touched.password && formData.password.length < 6 && (
                   <p className="text-red-500 text-xs mt-1">Password must be at least 6 characters</p>
                 )}
               </motion.div>
 
+              {/* Forgot Password Link */}
               <motion.div 
                 className="flex justify-end mb-6"
                 variants={fadeInFromBottom}
@@ -292,11 +340,13 @@ const Login: React.FC = () => {
                 </Link>
               </motion.div>
 
+              {/* Login and Social Login Buttons */}
               <motion.div 
                 className="flex flex-col md:flex-row items-center justify-between mb-6"
                 variants={fadeInFromBottom}
                 custom={1.4}
               >
+                {/* Submit Button */}
                 <button
                   type="submit"
                   disabled={isLoading || !isFormValid()}
@@ -312,6 +362,7 @@ const Login: React.FC = () => {
                 
                 <span className="text-lg text-gray-800 mb-4 md:mb-0">Or</span>
                 
+                {/* Google Sign In Button */}
                 <div className="flex space-x-4">
                   <button
                     type="button"
@@ -334,19 +385,21 @@ const Login: React.FC = () => {
           </div>
         </motion.div>
         
-        {/* Right Side - Illustration/Features */}
+        {/* Right Side - Feature Showcase */}
         <motion.div 
           className="hidden md:flex md:w-1/2 bg-[#1c7b47] rounded-l-3xl justify-center items-center p-8 relative overflow-hidden"
           variants={landingStaggerContainer}
           initial="hidden"
           animate="visible"
         >
+          {/* Decorative background element */}
           <motion.div 
             className="absolute top-0 right-0 w-full h-full bg-green-400 rounded-bl-[30%]"
             variants={fadeInFromBottom}
             custom={0.2}
           ></motion.div>
           
+          {/* Feature card */}
           <motion.div 
             className="relative z-10"
             variants={fadeInFromBottom}

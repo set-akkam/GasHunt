@@ -1,6 +1,6 @@
 # Google Cloud credentials
-/config/keys/*.json 
-
+config/keys/*.json 
+config/keys/
 
 # Node modules
 node_modules/

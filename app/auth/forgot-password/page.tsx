@@ -1,3 +1,11 @@
+/**
+ * ForgotPassword Component
+ * 
+ * A page component that handles the password reset request flow.
+ * Users can enter their email to receive password reset instructions.
+ * Features responsive design, animations, and error handling.
+ */
+
 "use client"
 
 import React, { useState } from 'react';
@@ -11,11 +19,16 @@ import { fadeInFromBottom, landingStaggerContainer } from "@/app/animations/vari
 import toast from 'react-hot-toast';
 
 const ForgotPassword: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // State management for form handling and UI feedback
+  const [email, setEmail] = useState(''); // User's email input
+  const [error, setError] = useState(''); // Error message state
+  const [success, setSuccess] = useState(false); // Success state for form submission
+  const [isLoading, setIsLoading] = useState(false); // Loading state during API calls
 
+  /**
+   * Handles form submission for password reset request
+   * @param e - Form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -41,9 +54,10 @@ const ForgotPassword: React.FC = () => {
   };
 
   return (
+    // Main container with green background
     <div className="flex min-h-screen bg-[#1c7b47]">
       <div className="flex w-full">
-        {/* Left Side - Form */}
+        {/* Left Section - Password Reset Form */}
         <motion.div 
           className="w-full md:w-1/2 bg-white p-10 flex flex-col justify-center rounded-r-3xl shadow-lg"
           variants={landingStaggerContainer}
@@ -51,6 +65,7 @@ const ForgotPassword: React.FC = () => {
           animate="visible"
         >
           <div className="max-w-md mx-auto w-full">
+            {/* Back button to login page */}
             <motion.div 
               className="mb-6"
               variants={fadeInFromBottom}
@@ -63,6 +78,7 @@ const ForgotPassword: React.FC = () => {
               </Link>
             </motion.div>
 
+            {/* Page title */}
             <motion.div 
               className="mb-8"
               variants={fadeInFromBottom}
@@ -71,6 +87,7 @@ const ForgotPassword: React.FC = () => {
               <h1 className="text-5xl font-bold">Reset Password</h1>
             </motion.div>
             
+            {/* Instructions text */}
             <motion.p 
               className="text-lg text-gray-500 mb-8"
               variants={fadeInFromBottom}
@@ -79,11 +96,13 @@ const ForgotPassword: React.FC = () => {
               Enter your email address and we'll send you a link to reset your password.
             </motion.p>
 
+            {/* Password reset form */}
             <motion.form 
               onSubmit={handleSubmit}
               variants={fadeInFromBottom}
               custom={0.6}
             >
+              {/* Error message display */}
               {error && (
                 <motion.div 
                   className="rounded-md bg-red-50 p-4 mb-6"
@@ -93,6 +112,7 @@ const ForgotPassword: React.FC = () => {
                 </motion.div>
               )}
 
+              {/* Success message display */}
               {success && (
                 <motion.div 
                   className="rounded-md bg-green-50 p-4 mb-6"
@@ -104,7 +124,7 @@ const ForgotPassword: React.FC = () => {
                 </motion.div>
               )}
 
-              {/* Email Field */}
+              {/* Email input field */}
               <motion.div 
                 className="mb-6 relative"
                 variants={fadeInFromBottom}
@@ -124,6 +144,7 @@ const ForgotPassword: React.FC = () => {
                 </div>
               </motion.div>
 
+              {/* Submit button */}
               <motion.div 
                 className="flex flex-col md:flex-row items-center justify-between mb-6"
                 variants={fadeInFromBottom}
@@ -146,19 +167,21 @@ const ForgotPassword: React.FC = () => {
           </div>
         </motion.div>
         
-        {/* Right Side - Illustration/Features */}
+        {/* Right Section - Visual Elements */}
         <motion.div 
           className="hidden md:flex md:w-1/2 bg-[#1c7b47] rounded-l-3xl justify-center items-center p-8 relative overflow-hidden"
           variants={landingStaggerContainer}
           initial="hidden"
           animate="visible"
         >
+          {/* Decorative background element */}
           <motion.div 
             className="absolute top-0 right-0 w-full h-full bg-green-400 rounded-bl-[30%]"
             variants={fadeInFromBottom}
             custom={0.2}
           ></motion.div>
           
+          {/* Feature card */}
           <motion.div 
             className="relative z-10"
             variants={fadeInFromBottom}

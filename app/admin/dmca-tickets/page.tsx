@@ -1,28 +1,32 @@
+// DMCA Ticket Management Page
+// This page provides an admin interface for managing DMCA takedown requests
 "use client";
 import { motion } from "framer-motion";
 import { fadeInFromBottom, landingStaggerContainer } from "../../animations/variants";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 
+// Interface defining the structure of a DMCA ticket
 interface DMCATicket {
-  ticketNumber: string;
-  submittedAt: string;
-  status: "pending" | "in_review" | "resolved" | "rejected";
-  userName: string;
-  userEmail: string;
-  description: string;
-  location: string;
-  contactInfo: string;
+  ticketNumber: string;      // Unique identifier for the ticket
+  submittedAt: string;       // Timestamp of submission
+  status: "pending" | "in_review" | "resolved" | "rejected";  // Current status of the ticket
+  userName: string;          // Name of the submitter
+  userEmail: string;         // Email of the submitter
+  description: string;       // Description of the copyright infringement
+  location: string;          // URL or location of infringing material
+  contactInfo: string;       // Additional contact information
 }
 
 export default function DMCATicketsPage() {
-  const [tickets, setTickets] = useState<DMCATicket[]>([]);
-  const [filter, setFilter] = useState<"all" | "pending" | "in_review" | "resolved" | "rejected">("all");
-  const [selectedTicket, setSelectedTicket] = useState<DMCATicket | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // State management for tickets and UI
+  const [tickets, setTickets] = useState<DMCATicket[]>([]);  // List of all DMCA tickets
+  const [filter, setFilter] = useState<"all" | "pending" | "in_review" | "resolved" | "rejected">("all");  // Current filter selection
+  const [selectedTicket, setSelectedTicket] = useState<DMCATicket | null>(null);  // Currently selected ticket for detailed view
+  const [isLoading, setIsLoading] = useState(true);  // Loading state indicator
 
+  // Load tickets from localStorage on component mount
   useEffect(() => {
-    // Load tickets from localStorage
     const loadTickets = () => {
       const storedTickets = JSON.parse(localStorage.getItem('dmcaTickets') || '[]');
       setTickets(storedTickets);
@@ -31,15 +35,17 @@ export default function DMCATicketsPage() {
 
     loadTickets();
 
-    // Add event listener for storage changes
+    // Listen for storage changes to sync across tabs
     window.addEventListener('storage', loadTickets);
     return () => window.removeEventListener('storage', loadTickets);
   }, []);
 
+  // Filter tickets based on current filter selection
   const filteredTickets = filter === "all" 
     ? tickets 
     : tickets.filter(ticket => ticket.status === filter);
 
+  // Get appropriate color classes based on ticket status
   const getStatusColor = (status: DMCATicket["status"]) => {
     switch (status) {
       case "pending": return "bg-yellow-100 text-yellow-800";
@@ -49,6 +55,7 @@ export default function DMCATicketsPage() {
     }
   };
 
+  // Format date string to a more readable format
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -59,6 +66,7 @@ export default function DMCATicketsPage() {
     });
   };
 
+  // Update ticket status and persist to localStorage
   const updateTicketStatus = (ticketNumber: string, newStatus: DMCATicket["status"]) => {
     const updatedTickets = tickets.map(t => 
       t.ticketNumber === ticketNumber 
@@ -69,6 +77,7 @@ export default function DMCATicketsPage() {
     localStorage.setItem('dmcaTickets', JSON.stringify(updatedTickets));
   };
 
+  // Loading state UI
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#e6e6e6] to-white flex items-center justify-center">
@@ -77,9 +86,10 @@ export default function DMCATicketsPage() {
     );
   }
 
+  // Main page layout
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#e6e6e6] to-white">
-      {/* Hero Section */}
+      {/* Hero section with page title */}
       <div className="w-full bg-[#1c7b47] py-12">
         <div className="max-w-7xl mx-auto px-4">
           <motion.h1
@@ -95,7 +105,7 @@ export default function DMCATicketsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Submit New Button */}
+        {/* Button to submit new DMCA notice */}
         <div className="mb-8">
           <Link 
             href="/copyright" 
@@ -105,7 +115,7 @@ export default function DMCATicketsPage() {
           </Link>
         </div>
 
-        {/* Filters */}
+        {/* Status filter buttons */}
         <div className="mb-8 flex gap-4 overflow-x-auto pb-2">
           {["all", "pending", "in_review", "resolved", "rejected"].map((status) => (
             <button
@@ -122,7 +132,7 @@ export default function DMCATicketsPage() {
           ))}
         </div>
 
-        {/* No Tickets Message */}
+        {/* Empty state message */}
         {tickets.length === 0 ? (
           <div className="text-center py-12">
             <h3 className="text-xl text-gray-600 mb-4">No DMCA tickets submitted yet</h3>
@@ -131,7 +141,7 @@ export default function DMCATicketsPage() {
             </p>
           </div>
         ) : (
-          /* Tickets List */
+          /* Tickets list with status cards */
           <div className="grid grid-cols-1 gap-6">
             {filteredTickets.map((ticket) => (
               <motion.div
@@ -177,7 +187,7 @@ export default function DMCATicketsPage() {
         )}
       </div>
 
-      {/* Ticket Detail Modal */}
+      {/* Ticket detail modal */}
       {selectedTicket && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -197,6 +207,7 @@ export default function DMCATicketsPage() {
             </div>
 
             <div className="space-y-6">
+              {/* Status update section */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Status</h3>
                 <select
@@ -215,6 +226,7 @@ export default function DMCATicketsPage() {
                 </select>
               </div>
 
+              {/* Submitter information section */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Submitter Information</h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -224,6 +236,7 @@ export default function DMCATicketsPage() {
                 </div>
               </div>
 
+              {/* Complaint details section */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Complaint Details</h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -232,6 +245,7 @@ export default function DMCATicketsPage() {
                 </div>
               </div>
 
+              {/* Location of infringing material section */}
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Location of Infringing Material</h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -239,6 +253,7 @@ export default function DMCATicketsPage() {
                 </div>
               </div>
 
+              {/* Modal action buttons */}
               <div className="flex justify-end gap-4">
                 <button
                   onClick={() => setSelectedTicket(null)}

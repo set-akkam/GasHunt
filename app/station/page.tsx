@@ -22,20 +22,20 @@ import RecentPriceUpdates from '../components/RecentPriceUpdates';
 // Price validation constants for Ireland
 const PRICE_VALIDATION = {
   PETROL: {
-    MIN: 1.10,
-    MAX: 2.20,
+    MIN: 70.0,
+    MAX: 300.0,
   },
   PETROL_PREMIUM: {
-    MIN: 1.10,
-    MAX: 2.20,
+    MIN: 70.0,
+    MAX: 300.0,
   },
   DIESEL: {
-    MIN: 1.10,
-    MAX: 2.30,
+    MIN: 70.0,
+    MAX: 300.0,
   },
   DIESEL_PREMIUM: {
-    MIN: 1.10,
-    MAX: 2.30,
+    MIN: 70.0,
+    MAX: 300.0,
   }
 };
 
@@ -106,6 +106,145 @@ interface OCRResponse {
   fuelPrices: OCRFuelPrice[];
   error?: string;
 }
+
+// Add this new function to improve OCR text processing
+const processFuelPricesFromOCRText = (text: string): OCRFuelPrice[] => {
+  console.log("Processing raw OCR text:", text);
+  const extractedPrices: OCRFuelPrice[] = [];
+  
+  // Looking for patterns like:
+  // D followed by price (Diesel)
+  // D with milesPLUS followed by price (Diesel Premium)
+  // U followed by price (Petrol/Unleaded)
+  // U with milesPLUS followed by price (Petrol Premium/Unleaded Premium)
+  
+  // Get all numbers in the text, including those with trailing decimal points
+  // Use a more permissive regex that captures numbers like "203." as well as "195.9"
+  const allNumbersRegex = /\d+\.?\d*/g;
+  const allNumbers = text.match(allNumbersRegex) || [];
+  
+  // Normalize the numbers - ensure trailing decimals have a zero
+  const normalizedNumbers = allNumbers.map(num => {
+    // If number ends with a decimal point, add a zero
+    if (num.endsWith('.')) {
+      return num + '0';
+    }
+    return num;
+  });
+  
+  console.log("All normalized numbers found:", normalizedNumbers);
+  
+  // First, try to find diesel prices with their labels
+  const dieselRegex = /D\.?\s*(\d+\.?\d*)/i;
+  const dieselMatch = text.match(dieselRegex);
+  if (dieselMatch && dieselMatch[1]) {
+    // Normalize the price if it ends with a decimal point
+    let price = dieselMatch[1];
+    if (price.endsWith('.')) {
+      price = price + '0';
+    }
+    extractedPrices.push({ type: 'diesel', price });
+    console.log("Found diesel price:", price);
+  }
+  
+  // Find diesel premium prices
+  const dieselPremiumRegex = /D.*milesPLUS.*?(\d+\.?\d*)/i;
+  const dieselPremiumMatch = text.match(dieselPremiumRegex);
+  if (dieselPremiumMatch && dieselPremiumMatch[1]) {
+    // Normalize the price if it ends with a decimal point
+    let price = dieselPremiumMatch[1];
+    if (price.endsWith('.')) {
+      price = price + '0';
+    }
+    extractedPrices.push({ type: 'diesel_premium', price });
+    console.log("Found diesel premium price:", price);
+  }
+  
+  // Find unleaded/petrol prices
+  // First pattern: Look for U followed by number without milesPLUS between them
+  const petrolRegex = /U\s*(?!.*?milesPLUS).*?(\d+\.?\d*)/i;
+  const petrolMatch = text.match(petrolRegex);
+  
+  // Second approach: If U is found alone and there are stray numbers
+  const unleadedLabel = /\bU\b/i.test(text);
+  
+  if (petrolMatch && petrolMatch[1]) {
+    // Normalize the price if it ends with a decimal point
+    let price = petrolMatch[1];
+    if (price.endsWith('.')) {
+      price = price + '0';
+    }
+    extractedPrices.push({ type: 'petrol', price });
+    console.log("Found petrol price with U label:", price);
+  } else if (unleadedLabel && normalizedNumbers.length >= 3 && !extractedPrices.some(p => p.type === 'petrol')) {
+    // If we have a U label but couldn't match it directly with a price,
+    // and we have at least 3 numbers, assume the 3rd number is petrol
+    extractedPrices.push({ type: 'petrol', price: normalizedNumbers[2] });
+    console.log("Assigned petrol price from sequence:", normalizedNumbers[2]);
+  }
+  
+  // Find petrol premium prices
+  const petrolPremiumRegex = /U.*milesPLUS.*?(\d+\.?\d*)/i;
+  const petrolPremiumMatch = text.match(petrolPremiumRegex);
+  
+  if (petrolPremiumMatch && petrolPremiumMatch[1]) {
+    // Normalize the price if it ends with a decimal point
+    let price = petrolPremiumMatch[1];
+    if (price.endsWith('.')) {
+      price = price + '0';
+    }
+    extractedPrices.push({ type: 'petrol_premium', price });
+    console.log("Found petrol premium price with UmilesPLUS label:", price);
+  } else if (unleadedLabel && normalizedNumbers.length >= 4 && !extractedPrices.some(p => p.type === 'petrol_premium')) {
+    // If we have a U label but couldn't match premium directly,
+    // and we have at least 4 numbers, assume the 4th number is petrol premium
+    extractedPrices.push({ type: 'petrol_premium', price: normalizedNumbers[3] });
+    console.log("Assigned petrol premium price from sequence:", normalizedNumbers[3]);
+  }
+  
+  // If we still don't have all 4 prices but have enough numbers, try to fill in the gaps
+  if (extractedPrices.length < 4 && normalizedNumbers.length >= 4) {
+    const fuelTypes = ['diesel', 'diesel_premium', 'petrol', 'petrol_premium'];
+    const extractedTypes = extractedPrices.map(p => p.type);
+    
+    // Look for missing fuel types
+    fuelTypes.forEach((type, index) => {
+      if (!extractedTypes.includes(type) && normalizedNumbers[index]) {
+        extractedPrices.push({ type, price: normalizedNumbers[index] });
+        console.log(`Assigned ${type} price by position: ${normalizedNumbers[index]}`);
+      }
+    });
+  }
+  
+  // Final fallback: If we still don't have all fuel types but have enough numbers,
+  // just assign them in order regardless of labels
+  if (extractedPrices.length === 0 && normalizedNumbers.length >= 4) {
+    console.log("No fuel types detected by labels, assigning by position only");
+    
+    // Assign fuel prices based on fixed positions in the sign:
+    // 1. Diesel
+    // 2. Diesel Premium
+    // 3. Petrol
+    // 4. Petrol Premium
+    extractedPrices.push({ type: 'diesel', price: normalizedNumbers[0] });
+    extractedPrices.push({ type: 'diesel_premium', price: normalizedNumbers[1] });
+    extractedPrices.push({ type: 'petrol', price: normalizedNumbers[2] });
+    extractedPrices.push({ type: 'petrol_premium', price: normalizedNumbers[3] });
+  }
+  
+  // Convert to proper format for API
+  return extractedPrices.map(item => {
+    // Convert diesel_premium to diesel with premium flag
+    if (item.type === 'diesel_premium') {
+      return { type: 'diesel premium', price: item.price };
+    }
+    // Convert petrol_premium to petrol with premium flag
+    if (item.type === 'petrol_premium') {
+      return { type: 'petrol premium', price: item.price };
+    }
+    return item;
+  });
+};
 
 export default function FuelPrices() {
   const { user } = useAuth();
@@ -698,15 +837,23 @@ export default function FuelPrices() {
       console.log('OCR raw response:', data);
 
       if (data.success) {
-        if (data.fuelPrices.length > 0) {
-          console.log('Processing extracted fuel prices:', data.fuelPrices);
+        // Apply our improved text processing to extract prices
+        const improvedPrices = processFuelPricesFromOCRText(data.text);
+        console.log("Improved extraction found prices:", improvedPrices);
+        
+        // If we found prices with our improved method, use those
+        // Otherwise fall back to the server-provided prices
+        const fuelPricesToUse = improvedPrices.length > 0 ? improvedPrices : data.fuelPrices;
+        
+        if (fuelPricesToUse.length > 0) {
+          console.log('Processing extracted fuel prices:', fuelPricesToUse);
           // Update the fuel prices form with extracted values
           const newFuelPrices = [...fuelPrices];
           
           // Track which fuel types were found by OCR
           const detectedFuelTypes = new Set<string>();
           
-          data.fuelPrices.forEach((fuelPrice: OCRFuelPrice) => {
+          fuelPricesToUse.forEach((fuelPrice: OCRFuelPrice) => {
             const { type, price } = fuelPrice;
             console.log('Processing fuel price:', { type, price });
             
@@ -761,8 +908,10 @@ export default function FuelPrices() {
           console.log('Updated fuel prices:', newFuelPrices);
           setFuelPrices(newFuelPrices);
           
-          // Show confirmation dialog instead of immediately showing price form
-          showOCRConfirmation(newFuelPrices, detectedFuelTypes, imageData);
+          // Skip the confirmation dialog and directly show the price form
+          setShowPriceForm(true);
+          setShowImageCapture(false);
+          toast.success(`Extracted ${detectedFuelTypes.size} fuel prices. You can edit any values before submitting.`);
         } else {
           console.log('No fuel prices found in OCR result');
           toast.error('No fuel prices found in the image. Please try taking a clearer picture.');
@@ -776,105 +925,6 @@ export default function FuelPrices() {
       toast.error('Failed to process image');
     }
     setProcessingImage(false);
-  };
-
-  // Function to show OCR confirmation dialog
-  const showOCRConfirmation = (extractedPrices: any[], detectedTypes: Set<string>, imagePreview: string | null) => {
-    toast(
-      (t) => (
-        <div className="flex flex-col gap-3 max-w-md">
-          <h3 className="font-medium text-lg">Verify Extracted Prices</h3>
-          <p className="text-sm text-gray-600">Please verify and correct the prices extracted from your image:</p>
-          
-          {imagePreview && (
-            <div className="border border-gray-300 rounded-lg overflow-hidden mb-2">
-              <img src={imagePreview} alt="Captured image" className="w-full h-auto" />
-            </div>
-          )}
-          
-          <div className="grid grid-cols-2 gap-3">
-            {extractedPrices.map((price, index) => (
-              <div key={index} className="flex flex-col gap-1">
-                <label className="text-sm font-medium">
-                  {price.fuelType === 'PETROL' ? 'Petrol' :
-                    price.fuelType === 'PETROL_PREMIUM' ? 'Premium Petrol' :
-                    price.fuelType === 'DIESEL' ? 'Diesel' :
-                    'Premium Diesel'}
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
-                  <input
-                    type="text"
-                    value={price.price}
-                    onChange={(e) => {
-                      const updated = [...extractedPrices];
-                      updated[index] = { ...updated[index], price: e.target.value };
-                      setFuelPrices(updated);
-                    }}
-                    className={`pl-8 pr-3 py-2 border ${
-                      (() => {
-                        // Check if price is within valid range
-                        const numPrice = parseFloat(price.price);
-                        const validation = PRICE_VALIDATION[price.fuelType as keyof typeof PRICE_VALIDATION];
-                        if (isNaN(numPrice)) return detectedTypes.has(price.fuelType) ? 'border-green-500 bg-green-50' : 'border-gray-300';
-                        if (numPrice < validation.MIN || numPrice > validation.MAX) return 'border-red-500 bg-red-50';
-                        return detectedTypes.has(price.fuelType) ? 'border-green-500 bg-green-50' : 'border-gray-300';
-                      })()
-                    } rounded-md w-full`}
-                    placeholder="0.00"
-                  />
-                  <div className="mt-1 text-xs text-gray-500">
-                    €{PRICE_VALIDATION[price.fuelType as keyof typeof PRICE_VALIDATION].MIN.toFixed(2)} - 
-                    €{PRICE_VALIDATION[price.fuelType as keyof typeof PRICE_VALIDATION].MAX.toFixed(2)}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="flex justify-end gap-2 mt-2">
-            <button
-              onClick={() => {
-                toast.dismiss(t.id);
-              }}
-              className="px-3 py-1.5 border border-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                // Validate price ranges before proceeding
-                const invalidPrices = fuelPrices.filter(price => {
-                  if (!price.price) return false;
-                  const numPrice = parseFloat(price.price);
-                  if (isNaN(numPrice)) return false;
-                  const validation = PRICE_VALIDATION[price.fuelType as keyof typeof PRICE_VALIDATION];
-                  return numPrice < validation.MIN || numPrice > validation.MAX;
-                });
-
-                if (invalidPrices.length > 0) {
-                  const invalidTypes = invalidPrices.map(price => {
-                    const type = price.fuelType.replace('_', ' ').toLowerCase();
-                    const validation = PRICE_VALIDATION[price.fuelType as keyof typeof PRICE_VALIDATION];
-                    return `${type} (€${validation.MIN.toFixed(2)} - €${validation.MAX.toFixed(2)})`;
-                  });
-                  toast.error(`Invalid price ranges for: ${invalidTypes.join(', ')}`);
-                  return;
-                }
-
-                toast.dismiss(t.id);
-                setShowPriceForm(true);
-                toast.success('Ready to submit prices!');
-              }}
-              className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
-            >
-              Confirm Prices
-            </button>
-          </div>
-        </div>
-      ),
-      { duration: Infinity }
-    );
   };
 
   // Update the camera button click handler

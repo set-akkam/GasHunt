@@ -54,6 +54,7 @@ const fetchLeaderboard = async (): Promise<User[]> => {
 export default function Leaderboard(): React.ReactElement {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [displayCount, setDisplayCount] = useState(10); // Number of users to display
 
   useEffect(() => {
     const loadLeaderboard = async () => {
@@ -72,6 +73,11 @@ export default function Leaderboard(): React.ReactElement {
     const interval = setInterval(loadLeaderboard, 60000);
     return () => clearInterval(interval);
   }, []);
+
+  // Function to load more users
+  const loadMore = () => {
+    setDisplayCount(prev => prev + 10);
+  };
 
   const getRankStyle = (rank: number) => {
     switch (rank) {
@@ -118,6 +124,10 @@ export default function Leaderboard(): React.ReactElement {
     );
   }
 
+  // Get the users to display based on the displayCount
+  const displayedUsers = users.slice(0, displayCount);
+  const hasMoreUsers = users.length > displayCount;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-[#1c7b47] p-8">
       <motion.div
@@ -142,7 +152,7 @@ export default function Leaderboard(): React.ReactElement {
 
         {/* Leaderboard List */}
         <div className="space-y-4">
-          {users.map((user, index) => {
+          {displayedUsers.map((user, index) => {
             const style = getRankStyle(user.rank);
             return (
               <motion.div
@@ -194,11 +204,36 @@ export default function Leaderboard(): React.ReactElement {
           })}
         </div>
 
+        {/* Show More Button */}
+        {hasMoreUsers && (
+          <motion.div
+            className="text-center mt-8"
+            variants={fadeInFromBottom}
+            custom={displayedUsers.length * 0.1 + 1}
+          >
+            <button
+              onClick={loadMore}
+              className="bg-gradient-to-r from-[#1c7b47] to-[#25a55f] hover:from-[#25a55f] hover:to-[#2bc26f] text-white font-bold py-3 px-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(37,165,95,0.5)] focus:outline-none focus:ring-2 focus:ring-[#25a55f] focus:ring-opacity-50 border-2 border-[#2bc26f] flex items-center justify-center space-x-2 group"
+            >
+              <span>Show More</span>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5 transition-transform duration-300 transform group-hover:translate-y-1" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </motion.div>
+        )}
+
         {/* Footer Section */}
         <motion.div
           className="text-center mt-12"
           variants={fadeInFromBottom}
-          custom={users.length * 0.1 + 1}
+          custom={displayedUsers.length * 0.1 + (hasMoreUsers ? 2 : 1)}
         >
           <p className="text-gray-300 text-lg">
             Keep contributing to climb the ranks! 🚀

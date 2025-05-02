@@ -1,18 +1,27 @@
+/**
+ * Main server file for the Fuel Price Tracker backend
+ * This file sets up the Express server, middleware, routes, and error handling
+ */
+
+// Import required dependencies
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js"; // Import database connection
-import authRoutes from "./routes/authRoutes.js"; // Ensure default export
-import fuelRoutes from "./routes/fuelRoutes.js"; // Ensure default export
-import stationRoutes from "./routes/stationRoutes.js";
-import priceHistoryRoutes from './routes/priceHistory.js';
-import leaderboardRoutes from './routes/leaderboard.js';
-dotenv.config(); // Load environment variables
+import authRoutes from "./routes/authRoutes.js"; // Authentication routes
+import fuelRoutes from "./routes/fuelRoutes.js"; // Fuel price related routes
+import stationRoutes from "./routes/stationRoutes.js"; // Gas station related routes
+import priceHistoryRoutes from './routes/priceHistory.js'; // Price history tracking routes
+import leaderboardRoutes from './routes/leaderboard.js'; // User leaderboard routes
 
+// Load environment variables from .env file
+dotenv.config();
+
+// Initialize Express application
 const app = express();
 
-// Middleware
-app.use(express.json());
+// Configure middleware
+app.use(express.json()); // Parse JSON request bodies
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? 'https://your-production-domain.com' 
@@ -22,7 +31,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Debug middleware to log all requests
+// Debug middleware to log all incoming requests
 app.use((req, res, next) => {
   console.log('\n🔍 Request:', {
     method: req.method,
@@ -32,7 +41,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Token debug middleware for protected routes
+// Token debug middleware specifically for protected station routes
 app.use('/api/stations/*', (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   console.log('🔐 Token debug:', {
@@ -43,14 +52,14 @@ app.use('/api/stations/*', (req, res, next) => {
   next();
 });
 
-// Mount routes
-app.use("/api/auth", authRoutes);
-app.use("/api/fuel", fuelRoutes);
-app.use("/api/stations", stationRoutes);
-app.use('/api/price-history', priceHistoryRoutes);
-app.use('/api/leaderboard', leaderboardRoutes);
+// Mount all route handlers
+app.use("/api/auth", authRoutes); // Authentication endpoints
+app.use("/api/fuel", fuelRoutes); // Fuel price endpoints
+app.use("/api/stations", stationRoutes); // Gas station endpoints
+app.use('/api/price-history', priceHistoryRoutes); // Price history endpoints
+app.use('/api/leaderboard', leaderboardRoutes); // Leaderboard endpoints
 
-// Debug endpoint to check if server is running
+// Debug endpoint to check server status and available routes
 app.get('/api/debug', (req, res) => {
   res.json({
     status: 'Server is running',
@@ -68,7 +77,7 @@ app.get('/api/debug', (req, res) => {
   });
 });
 
-// Error handling middleware
+// Global error handling middleware
 app.use((err, req, res, next) => {
   console.error('❌ Error:', err);
   res.status(500).json({ 
@@ -77,9 +86,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Connect Database
+// Connect to the database
 connectDB();
 
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n✅ Server running on port ${PORT}`);

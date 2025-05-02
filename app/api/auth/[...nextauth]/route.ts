@@ -1,16 +1,18 @@
+// NextAuth configuration for handling authentication in the application
 import { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+// Extend the default NextAuth types to include custom user properties
 declare module "next-auth" {
   interface User {
-    id: string;
-    name?: string | null;
-    email?: string | null;
-    token?: string;
-    _id?: string;
-    provider?: string;
+    id: string;          // Unique identifier for the user
+    name?: string | null; // User's display name
+    email?: string | null; // User's email address
+    token?: string;      // JWT token for backend authentication
+    _id?: string;        // MongoDB document ID
+    provider?: string;   // Authentication provider (google/credentials)
   }
 
   interface Session {
@@ -25,24 +27,30 @@ declare module "next-auth" {
   }
 }
 
+// Main authentication configuration
 export const authOptions: NextAuthOptions = {
+  // Configure authentication providers
   providers: [
+    // Google OAuth provider configuration
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+    // Custom credentials provider for email/password login
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
+      // Custom authorization logic for credentials login
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
         try {
+          // Authenticate with backend API
           const response = await fetch('http://localhost:5000/api/auth/login', {
             method: 'POST',
             headers: {
@@ -56,6 +64,7 @@ export const authOptions: NextAuthOptions = {
 
           const data = await response.json();
 
+          // Return user object if authentication successful
           if (response.ok && data.token) {
             return {
               id: data._id,
@@ -73,10 +82,13 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  // Authentication callbacks for customizing the auth flow
   callbacks: {
+    // Handle Google sign-in and backend integration
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
         try {
+          // Send Google user data to backend for verification/registration
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`, {
             method: 'POST',
             headers: {
@@ -96,6 +108,7 @@ export const authOptions: NextAuthOptions = {
 
           const data = await response.json();
           if (data.token) {
+            // Update user object with backend data
             user.token = data.token;
             user._id = data._id;
             user.provider = 'google';
@@ -110,6 +123,7 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
+    // Customize JWT token with user data
     async jwt({ token, user, account }) {
       if (user) {
         token.token = user.token;
@@ -120,6 +134,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
+    // Customize session object and fetch latest user data
     async session({ session, token }) {
       if (session.user) {
         try {
@@ -139,12 +154,14 @@ export const authOptions: NextAuthOptions = {
           console.error('Error fetching user data:', error);
         }
 
+        // Update session with user data
         session.user.token = token.token as string;
         session.user._id = token._id as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.provider = token.provider as string;
 
+        // Dispatch custom event for client-side state management
         if (typeof window !== 'undefined') {
           const event = new CustomEvent('authStateChange', {
             detail: {
@@ -162,14 +179,17 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  // Custom pages configuration
   pages: {
     signIn: '/auth/login',
   },
+  // Session configuration
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 };
 
+// Export NextAuth handler for API routes
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

@@ -9,6 +9,12 @@
  * - Station selection and details popup
  * - Optimized data fetching based on current map viewport bounds
  * - Debounced map move/zoom events to prevent excessive data re-fetching
+ * 
+ * Performance Optimizations:
+ * - Uses marker clustering to group nearby stations
+ * - Implements viewport-based data filtering
+ * - Debounces map movement events
+ * - Caches marker references for efficient updates
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
@@ -23,15 +29,20 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 /**
  * Type extension for Leaflet to support marker clustering
  * Adds missing types for the MarkerClusterGroup plugin
+ * 
+ * Marker clustering improves performance by:
+ * 1. Reducing the number of DOM elements
+ * 2. Grouping nearby markers into clusters
+ * 3. Only showing individual markers when zoomed in
  */
 declare module 'leaflet' {
   interface MarkerClusterGroupOptions {
-    maxClusterRadius?: number;
-    spiderfyOnMaxZoom?: boolean;
-    showCoverageOnHover?: boolean;
-    zoomToBoundsOnClick?: boolean;
-    animate?: boolean;
-    iconCreateFunction?: (cluster: any) => L.DivIcon;
+    maxClusterRadius?: number;      // Maximum radius for clustering (in pixels)
+    spiderfyOnMaxZoom?: boolean;    // Whether to spiderfy markers at max zoom
+    showCoverageOnHover?: boolean;  // Show cluster bounds on hover
+    zoomToBoundsOnClick?: boolean;  // Zoom to cluster bounds on click
+    animate?: boolean;              // Animate marker clustering
+    iconCreateFunction?: (cluster: any) => L.DivIcon;  // Custom cluster icon
   }
 
   class MarkerClusterGroup extends L.FeatureGroup {
@@ -48,6 +59,7 @@ declare module 'leaflet' {
 }
 
 // Fix Leaflet's default icon paths for Next.js
+// Required because Next.js handles static assets differently
 if (typeof window !== 'undefined') {
   delete (L.Icon.Default.prototype as any)._getIconUrl;
   L.Icon.Default.mergeOptions({
@@ -57,7 +69,15 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Add custom CSS for marker clusters
+/**
+ * Custom CSS for marker clusters
+ * Defines visual styles for different cluster sizes:
+ * - Small clusters: Green theme
+ * - Medium clusters: Yellow theme
+ * - Large clusters: Orange theme
+ * 
+ * Each size has distinct colors for better visual hierarchy
+ */
 const clusterStyles = `
 .marker-cluster-small {
   background-color: rgba(181, 226, 140, 0.6);
@@ -101,6 +121,7 @@ const clusterStyles = `
 
 /**
  * Props interface for the Map component
+ * Defines the contract for map initialization and interaction
  */
 interface MapProps {
   center: [number, number];          // Initial map center coordinates
@@ -118,6 +139,7 @@ interface MapProps {
 /**
  * Map container styling
  * Ensures the map takes up the full container space
+ * Uses absolute positioning to prevent layout shifts
  */
 const mapContainerStyle = {
   width: "100%",
@@ -135,6 +157,11 @@ const ICON_ANCHOR = ICON_SIZE / 2;
 /**
  * Custom icons for different marker types
  * Includes brand-specific icons and user location marker
+ * 
+ * Each icon is configured with:
+ * - Appropriate size and anchor points
+ * - Custom class for styling
+ * - Popup anchor for info windows
  */
 const icons = {
   default: new L.Icon({
@@ -170,6 +197,8 @@ const icons = {
 /**
  * Determines the appropriate icon for a station based on its brand name
  * Falls back to default icon if brand is not recognized
+ * 
+ * Brand detection is case-insensitive and handles common variations
  */
 const getStationIcon = (station: StationWithPrices) => {
   if (!station?.name) return icons.default;
@@ -217,6 +246,18 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (..
  * 1. Viewport-based data filtering - only displaying stations visible in the current view
  * 2. Debounced map events - preventing excessive API calls during map interaction
  * 3. Efficient marker clustering - grouping nearby stations for better performance
+ * 4. Reference caching - maintaining stable references to map elements
+ * 
+ * @param containerId - DOM element ID for map container
+ * @param center - Initial map center coordinates
+ * @param zoom - Initial zoom level
+ * @param stations - Array of stations to display
+ * @param selectedStation - Currently selected station
+ * @param searchRadius - Search radius in meters
+ * @param userLocation - User's current location
+ * @param router - Next.js router for navigation
+ * @param onMapLoad - Callback when map is loaded
+ * @param onViewportChange - Callback when viewport changes
  */
 function useLeafletMap({
   containerId,

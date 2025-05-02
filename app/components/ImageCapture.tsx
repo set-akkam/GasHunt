@@ -1,12 +1,36 @@
+/**
+ * ImageCapture Component
+ * 
+ * A modal component that allows users to capture or upload images of fuel price signs.
+ * Provides both camera capture and file upload functionality with user guidance.
+ */
+
 import { useState, useRef } from 'react';
 import { FaCamera, FaImage, FaTimes, FaInfoCircle } from 'react-icons/fa';
 
+/**
+ * Props interface for the ImageCapture component
+ * 
+ * @interface ImageCaptureProps
+ * @property {() => void} onClose - Callback function to close the modal
+ * @property {(imageData: string | null, file: File | null) => void} onImageCapture - Callback function to handle captured/uploaded image
+ */
 interface ImageCaptureProps {
   onClose: () => void;
   onImageCapture: (imageData: string | null, file: File | null) => void;
 }
 
+/**
+ * ImageCapture Component
+ * 
+ * A modal component that provides functionality for capturing or uploading images
+ * of fuel price signs. Supports both camera capture and file upload with user guidance.
+ * 
+ * @param {ImageCaptureProps} props - Component props
+ * @returns {JSX.Element} The ImageCapture component
+ */
 export default function ImageCapture({ onClose, onImageCapture }: ImageCaptureProps) {
+  // State management
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -15,6 +39,12 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [showTips, setShowTips] = useState(false);
 
+  /**
+   * Starts the camera stream and sets up video element
+   * 
+   * @async
+   * @returns {Promise<void>}
+   */
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -31,6 +61,9 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
     }
   };
 
+  /**
+   * Stops the camera stream and cleans up resources
+   */
   const stopCamera = () => {
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
@@ -39,6 +72,9 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
     setShowCamera(false);
   };
 
+  /**
+   * Captures an image from the video stream and converts it to a file
+   */
   const captureImage = () => {
     if (videoRef.current) {
       const canvas = document.createElement('canvas');
@@ -63,6 +99,11 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
     }
   };
 
+  /**
+   * Handles file selection from input element
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} event - File input change event
+   */
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -75,11 +116,19 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
     }
   };
 
+  /**
+   * Confirms the selected/captured image and closes the modal
+   */
   const handleConfirm = () => {
     onImageCapture(selectedImage, selectedFile);
     onClose();
   };
 
+  /**
+   * Renders tips for taking good fuel price photos
+   * 
+   * @returns {JSX.Element} Tips section component
+   */
   const renderPhotoTips = () => (
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
       <div className="flex items-start">
@@ -100,10 +149,13 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Modal backdrop */}
       <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" onClick={onClose}></div>
       
+      {/* Modal content */}
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <div className="relative bg-white rounded-lg max-w-lg w-full p-6">
+          {/* Close button */}
           <button
             onClick={onClose}
             className="absolute right-4 top-4 text-gray-400 hover:text-gray-500"
@@ -113,6 +165,7 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
 
           <h3 className="text-xl font-semibold mb-4">Capture Fuel Price</h3>
 
+          {/* Camera view */}
           {showCamera ? (
             <div className="space-y-4">
               {showTips && renderPhotoTips()}
@@ -123,6 +176,7 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
                   playsInline
                   className="w-full rounded-lg border-2 border-dashed border-gray-300"
                 />
+                {/* Camera overlay frame */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="border-2 border-dashed border-yellow-500 w-3/4 h-3/5 rounded-md opacity-50"></div>
                 </div>
@@ -137,6 +191,7 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
               </div>
             </div>
           ) : selectedImage ? (
+            // Preview mode
             <div className="space-y-4">
               <img
                 src={selectedImage}
@@ -162,9 +217,11 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
               </div>
             </div>
           ) : (
+            // Initial selection mode
             <div className="space-y-4">
               {renderPhotoTips()}
               <div className="grid grid-cols-2 gap-4">
+                {/* Camera button */}
                 <button
                   onClick={startCamera}
                   className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400"
@@ -173,6 +230,7 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
                   <span className="text-sm font-medium text-gray-600">Take Photo</span>
                 </button>
                 
+                {/* Upload button */}
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400"
@@ -182,6 +240,7 @@ export default function ImageCapture({ onClose, onImageCapture }: ImageCapturePr
                 </button>
               </div>
               
+              {/* Hidden file input */}
               <input
                 type="file"
                 ref={fileInputRef}

@@ -11,6 +11,16 @@ import { FaGasPump, FaChevronDown, FaChevronUp, FaTrash, FaStar } from 'react-ic
 import toast from 'react-hot-toast';
 import OnboardingTour from '../components/OnboardingTour';
 
+/**
+ * Interface defining the structure of a price update
+ * @interface PriceUpdate
+ * @property {string} submissionId - Unique identifier for the price submission
+ * @property {Object} submittedBy - Information about the user who submitted the update
+ * @property {string} createdAt - Timestamp of when the update was created
+ * @property {Object} station - Information about the fuel station
+ * @property {Array} updates - List of fuel price updates
+ * @property {number} submissionVoteScore - Score based on user votes
+ */
 interface PriceUpdate {
   submissionId: string;
   submittedBy: {
@@ -32,6 +42,17 @@ interface PriceUpdate {
   submissionVoteScore: number;
 }
 
+/**
+ * Interface defining the structure of a starred station
+ * @interface StarredStation
+ * @property {string} _id - Unique identifier for the station
+ * @property {number} stationid - Station identifier
+ * @property {string} stationName - Name of the station
+ * @property {number} latitude - Geographic latitude
+ * @property {number} longitude - Geographic longitude
+ * @property {string} starredAt - Timestamp of when the station was starred
+ * @property {Object} [prices] - Optional price information for different fuel types
+ */
 interface StarredStation {
   _id: string;
   stationid: number;
@@ -47,6 +68,10 @@ interface StarredStation {
   };
 }
 
+/**
+ * Dashboard page component that displays user's starred stations and recent price updates
+ * @component DashboardPage
+ */
 export default function DashboardPage() {
   const { user, isLoading: authLoading } = useAuth();
   const { data: session, status: sessionStatus } = useSession();
@@ -58,13 +83,14 @@ export default function DashboardPage() {
   const [starredLoading, setStarredLoading] = useState(true);
   const [unstarringId, setUnstarringId] = useState<number | null>(null);
 
+  // Redirect to login if user is not authenticated
   useEffect(() => {
-    // Only redirect if both auth states are loaded and user is not authenticated
     if (!authLoading && sessionStatus !== 'loading' && (!user || !session)) {
       router.push('/auth/login');
     }
   }, [user, authLoading, session, sessionStatus, router]);
 
+  // Fetch recent updates and starred stations when user is authenticated
   useEffect(() => {
     if (!authLoading && user?.token) {
       fetchRecentUpdates();
@@ -72,9 +98,12 @@ export default function DashboardPage() {
     }
   }, [authLoading, user]);
 
+  /**
+   * Fetches recent fuel price updates from the API
+   */
   const fetchRecentUpdates = async () => {
     try {
-      const data = await getRecentFuelPrices(5, user?.token); // Pass user token to get user-specific updates
+      const data = await getRecentFuelPrices(5, user?.token);
       setRecentUpdates(data);
     } catch (error) {
       console.error('Error fetching recent updates:', error);
@@ -83,6 +112,9 @@ export default function DashboardPage() {
     }
   };
 
+  /**
+   * Fetches user's starred stations from the API
+   */
   const fetchStarredStations = async () => {
     if (!user?.token) return;
     try {
@@ -96,6 +128,10 @@ export default function DashboardPage() {
     }
   };
 
+  /**
+   * Handles deletion of a price submission
+   * @param {string} submissionId - ID of the submission to delete
+   */
   const handleDeleteSubmission = async (submissionId: string) => {
     if (!user?.token) {
       router.push('/auth/login');
@@ -141,6 +177,10 @@ export default function DashboardPage() {
     );
   };
 
+  /**
+   * Handles unstarring a station
+   * @param {number} stationid - ID of the station to unstar
+   */
   const handleUnstar = async (stationid: number) => {
     if (!user?.token) {
       toast.error('Please sign in to unstar stations');
@@ -159,12 +199,12 @@ export default function DashboardPage() {
     }
   };
 
-  // Show loading state while either auth state is loading
+  // Show loading state while authentication is being checked
   if (authLoading || sessionStatus === 'loading') {
     return <Loading fullScreen />;
   }
 
-  // Don't render anything if not authenticated
+  // Don't render anything if user is not authenticated
   if (!user || !session) {
     return null;
   }

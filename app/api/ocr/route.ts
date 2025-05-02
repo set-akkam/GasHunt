@@ -1,37 +1,48 @@
+/**
+ * OCR API Route for Fuel Price Detection
+ * 
+ * This route handles image processing and OCR using Google Cloud Vision API
+ * to extract fuel prices from images of gas station price signs.
+ */
+
 import { NextResponse } from 'next/server';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
 import { writeFile } from 'fs/promises';
 import { join, isAbsolute } from 'path';
 import * as os from 'os';
 import * as fs from 'fs';
-import sharp from 'sharp'; // Fixing the sharp import
+import sharp from 'sharp'; // Image processing library
 
 // Initialize Vision client with credentials
 let client: ImageAnnotatorClient | null = null;
 
-// Request counter for API limit monitoring
+// Rate limiting configuration
 let requestCounter = 0;
-const MAX_REQUESTS_PER_MINUTE = 100; // Adjust based on your API quota
+const MAX_REQUESTS_PER_MINUTE = 100; // API quota limit
 let requestTimestamp = Date.now();
 
+/**
+ * Initializes the Google Cloud Vision client with proper credentials
+ * @returns Promise<boolean> - Success status of initialization
+ */
 const initializeVisionClient = async () => {
   try {
     // First try environment variable path
     let credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || '';
     
-    // If it's a relative path, make it absolute
+    // Convert relative path to absolute if needed
     if (!isAbsolute(credentialsPath)) {
       credentialsPath = join(process.cwd(), credentialsPath);
     }
     
     console.log('Checking credentials path:', credentialsPath);
     
-    // Verify if the credentials file exists
+    // Verify credentials file exists
     if (!fs.existsSync(credentialsPath)) {
       throw new Error(`Credentials file not found at: ${credentialsPath}`);
     }
 
-    // Try to read and parse the credentials file
+    // Validate credentials file format
     try {
       const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
       if (!credentials.project_id || !credentials.private_key) {
@@ -42,11 +53,12 @@ const initializeVisionClient = async () => {
       throw new Error(`Invalid credentials file: ${message}`);
     }
     
+    // Initialize Vision client
     client = new ImageAnnotatorClient({
       keyFilename: credentialsPath
     });
     
-    // Test the client with a simple call
+    // Test client connection
     await client.initialize();
     console.log('Vision client initialized and tested successfully');
     return true;
@@ -56,7 +68,10 @@ const initializeVisionClient = async () => {
   }
 };
 
-// Function to check API rate limits
+/**
+ * Implements rate limiting for API requests
+ * @returns boolean - Whether request is allowed
+ */
 function checkRateLimit() {
   const now = Date.now();
   
@@ -76,19 +91,20 @@ function checkRateLimit() {
   return true;
 }
 
-// Image preprocessing to improve OCR results
+/**
+ * Preprocesses image to improve OCR accuracy
+ * @param inputPath - Path to input image
+ * @param outputPath - Path to save processed image
+ * @returns Promise<boolean> - Success status of preprocessing
+ */
 async function preprocessImage(inputPath: string, outputPath: string) {
   try {
     await sharp(inputPath)
-      // Increase contrast to make text more visible
-      .normalize()
-      // Sharpen the image to make text clearer
-      .sharpen()
-      // Remove noise
-      .median(1)
-      // Increase brightness slightly
-      .modulate({ brightness: 1.1 })
-      // Save the processed image
+      // Enhance image for better text recognition
+      .normalize() // Increase contrast
+      .sharpen() // Make text clearer
+      .median(1) // Reduce noise
+      .modulate({ brightness: 1.1 }) // Adjust brightness
       .toFile(outputPath);
     
     return true;
@@ -98,6 +114,10 @@ async function preprocessImage(inputPath: string, outputPath: string) {
   }
 }
 
+/**
+ * POST handler for OCR API endpoint
+ * Processes image and extracts fuel prices
+ */
 export async function POST(request: Request) {
   console.log('OCR API endpoint called');
   
@@ -110,7 +130,7 @@ export async function POST(request: Request) {
       }, { status: 429 });
     }
     
-    // Try to initialize client if not already initialized
+    // Initialize client if needed
     if (!client) {
       const initialized = await initializeVisionClient();
       if (!initialized) {
@@ -120,7 +140,7 @@ export async function POST(request: Request) {
           details: `Required: A valid Google Cloud service account key file at ${process.env.GOOGLE_APPLICATION_CREDENTIALS}`,
           setup: [
             '1. Create a Google Cloud project',
-            '2. Enable the Cloud Vision API',
+            '2. Enable the Coud Visilon API',
             '3. Create a service account and download the JSON key file',
             '4. Place the key file in config/keys/google-cloud-credentials.json',
             '5. Set GOOGLE_APPLICATION_CREDENTIALS in your .env file'
@@ -129,6 +149,7 @@ export async function POST(request: Request) {
       }
     }
 
+    // Get image from form data
     const formData = await request.formData();
     const file = formData.get('image') as File;
     
@@ -146,17 +167,17 @@ export async function POST(request: Request) {
       name: file.name
     });
 
-    // Convert the file to a buffer
+    // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Save original image to temp file
+    // Save to temporary files
     const originalFilePath = join(os.tmpdir(), `ocr-original-${Date.now()}.jpg`);
     const processedFilePath = join(os.tmpdir(), `ocr-processed-${Date.now()}.jpg`);
     console.log('Saving image to temp file:', originalFilePath);
     await writeFile(originalFilePath, buffer);
     
-    // Preprocess the image to improve OCR results
+    // Preprocess image
     console.log('Preprocessing image to improve OCR quality...');
     const preprocessed = await preprocessImage(originalFilePath, processedFilePath);
     const fileToProcess = preprocessed ? processedFilePath : originalFilePath;
@@ -188,25 +209,25 @@ export async function POST(request: Request) {
     let extractedText = detections[0].description || '';
     console.log('Raw extracted text:', extractedText);
     
-    // Enhanced price extraction logic with improved pattern matching
+    // Enhanced price extraction logic
     const lines = extractedText.split('\n');
     const fuelPrices: { type: string; price: string }[] = [];
     
-    // Common fuel type keywords and their variations
+    // Define fuel type keywords for classification
     const regularFuelKeywords = ['REGULAR', 'UNLEADED', 'PETROL', 'E10', 'ULP', 'STANDARD', '91', 'BASIC'];
     const premiumFuelKeywords = ['PREMIUM', 'PLUS', 'EXTRA', 'SUPREME', 'V-POWER', 'VPOWER', 'ULTIMATE', '95', '98'];
     const dieselKeywords = ['DIESEL', 'AUTO DIESEL', 'DERV', 'GASOIL', 'D'];
     const premiumDieselKeywords = [...dieselKeywords.map(k => `PREMIUM ${k}`), 'ULTIMATE DIESEL', 'V-POWER DIESEL', 'ADVANCED DIESEL'];
     
+    // Process each line for price extraction
     lines.forEach(line => {
-        // Clean up the line
+        // Clean and normalize line
         line = line.trim().toUpperCase().replace(/[^\w\s.-]/g, '');
         
-        // Skip lines that are too short
+        // Skip short lines
         if (line.length < 3) return;
         
-        // Extract price using more flexible regex patterns
-        // Look for patterns like: $9.99, 9.99, €9.99, 999, etc.
+        // Price pattern matching
         const pricePatterns = [
             /\$?(\d+\.\d+)/,         // Match $9.99 or 9.99
             /€?(\d+\.\d+)/,          // Match €9.99 or 9.99
@@ -217,11 +238,12 @@ export async function POST(request: Request) {
         let price: number | null = null;
         let matchedPattern = false;
         
+        // Try each price pattern
         for (const pattern of pricePatterns) {
             const match = line.match(pattern);
             if (match) {
                 const extracted = parseFloat(match[1]);
-                // Validate the price is within a reasonable range
+                // Validate price range
                 if (extracted > 0 && extracted < 1000) {
                     price = extracted;
                     matchedPattern = true;
@@ -232,29 +254,28 @@ export async function POST(request: Request) {
         
         if (!price) return;
         
-        // Convert from cents to euros/dollars if needed (e.g., 199 -> 1.99)
+        // Convert cents to dollars/euros if needed
         if (price >= 100 && price < 1000 && !line.includes('.')) {
             price = price / 100;
         }
         
-        // Determine fuel type based on keywords in the line
+        // Determine fuel type
         let type = '';
         
-        // Check for diesel variants first (more specific)
+        // Check fuel types in order of specificity
         if (premiumDieselKeywords.some(keyword => line.includes(keyword))) {
             type = 'diesel_premium';
         } 
         else if (dieselKeywords.some(keyword => line.includes(keyword))) {
             type = 'diesel';
         }
-        // Then check for petrol/unleaded variants
         else if (premiumFuelKeywords.some(keyword => line.includes(keyword))) {
             type = 'unleaded_premium';
         }
         else if (regularFuelKeywords.some(keyword => line.includes(keyword))) {
             type = 'unleaded';
         }
-        // If we can't determine the type but the price looks reasonable, add it as unknown
+        // Fallback for unknown types with valid prices
         else if (price > 0.5 && price < 10) {
             type = 'unknown';
         }
@@ -269,7 +290,7 @@ export async function POST(request: Request) {
     
     console.log('Extracted fuel prices:', fuelPrices);
 
-    // Clean up temp files
+    // Clean up temporary files
     try {
       await fs.promises.unlink(originalFilePath);
       if (preprocessed) {
@@ -280,7 +301,7 @@ export async function POST(request: Request) {
       console.error('Error cleaning up temp files:', cleanupError);
     }
 
-    // Return both the raw text and the extracted fuel prices
+    // Return results
     return NextResponse.json({
       success: true,
       text: extractedText,

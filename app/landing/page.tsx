@@ -59,6 +59,7 @@ export default function Landing() {
 
   return (
     <main className="min-h-screen bg-white px-4 py-6 sm:p-6 md:p-8 lg:p-12" role="main">
+      {/* Grid layout with responsive columns */}
       <div className="grid grid-cols-12 gap-6 sm:gap-8 md:gap-10">
         {/* Left Column - Feature Cards */}
         <div className="col-span-12 lg:col-span-7 grid grid-cols-1 gap-6 sm:gap-8">
@@ -69,7 +70,7 @@ export default function Landing() {
             initial="hidden"
             animate="visible"
           >
-            {/* Brand and headline content */}
+            {/* Brand and headline content with staggered animation */}
             <div className="max-w-[620px] space-y-6 sm:space-y-7 md:space-y-8">
               <motion.div 
                 variants={fadeInFromBottom}
@@ -95,13 +96,12 @@ export default function Landing() {
               </motion.p>
             </div>
 
-            {/* Call-to-action buttons */}
+            {/* Call-to-action buttons with conditional rendering based on auth state */}
             <motion.div 
               variants={fadeInFromBottom}
               custom={0.6}
               className="mt-8 sm:mt-10 lg:mt-12 flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-5"
             >
-              {/* Conditional rendering based on authentication state */}
               {session ? (
                 <button 
                   className="btn-grad w-full sm:w-auto text-base lg:text-lg font-semibold px-6 py-3 lg:px-8 lg:py-3.5 rounded-lg sm:rounded-xl"
@@ -129,7 +129,7 @@ export default function Landing() {
             </motion.div>
           </motion.div>
 
-          {/* Real-time Prices Feature Card */}
+          {/* Real-time Prices Feature Card with staggered animation */}
           <motion.div 
             className="bg-[#e6e6e6] rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden min-h-[240px] sm:min-h-[280px] lg:min-h-[300px]"
             variants={landingStaggerContainer}
@@ -156,7 +156,7 @@ export default function Landing() {
           </motion.div>
         </div>
 
-        {/* Right Column - Community Feature Card */}
+        {/* Right Column - Community Feature Card with staggered animation */}
         <motion.div 
           className="col-span-12 lg:col-span-5 bg-[#57d992] rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden min-h-[360px] sm:min-h-[400px] lg:min-h-[766px]"
           variants={landingStaggerContainer}
@@ -196,7 +196,7 @@ export default function Landing() {
           </div>
         </motion.div>
 
-        {/* Full-width Live Map Section */}
+        {/* Full-width Live Map Section with staggered animation */}
         <motion.div 
           className="col-span-12 bg-[#1c7b47] rounded-xl sm:rounded-2xl overflow-hidden"
           variants={landingStaggerContainer}
@@ -240,7 +240,7 @@ export default function Landing() {
               </motion.div>
             </div>
 
-            {/* Map Image */}
+            {/* Map Image with border styling */}
             <motion.div 
               className="relative h-[300px] sm:h-[400px] lg:h-full p-4 sm:p-6 rounded-xl sm:rounded-2xl border-4 sm:border-6 border-[#1c7b47]"
               variants={fadeInFromBottom}
